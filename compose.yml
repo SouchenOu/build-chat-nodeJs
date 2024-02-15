@@ -1,0 +1,49 @@
+version: "3.1"
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: souka
+      POSTGRES_DB: chat-app
+    volumes:
+      - $PWD/db:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+  client:
+    build: ./client/.
+    image: client:nextJs
+    container_name: nextJs
+    restart: "always"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app/
+      - /app/node_modules
+    networks:
+      - mynetwork
+
+  api:
+    build: ./server/.
+    image: server:nodeJs
+    container_name: nodeJs
+    restart: "always"
+    ports:
+      - "8000:8000"
+      - "5555:5555"
+    env_file:
+      - .env    
+    volumes:
+      - ./server:/app/
+      - /app/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
