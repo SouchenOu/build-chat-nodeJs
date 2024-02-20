@@ -1,4 +1,9 @@
+import { check_user_Route } from "@/utils/ApiRoutes";
+import { firebaseAuth } from "@/utils/FirebaseConfig";
+import axios from "axios";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FcGoogle} from "react-icons/fc"
 
@@ -14,8 +19,26 @@ function login() {
     // Clear the interval when the component is unmounted
     return () => clearInterval(intervalId);
   }, []);
-  const handleLogin = () =>{
+
+  const router = useRouter()
+  const handleLogin = async () =>{
+    const provider  = new GoogleAuthProvider();
+    const {user : {displayName: name, email, photoUrl: profileImage}} = await signInWithPopup(firebaseAuth, provider);
+    console.log("email here-->", email);
+    console.log("path", check_user_Route);
+    if(email){
+      const {data} = await axios.post(check_user_Route, { email });
+      if(!data.status){
+        router.push()
+
+      }
+    }
+
     
+    // alert("login");
+    // console.log("user here-->", user);
+    // console.log("data here-->", data);
+
   }
   return <div className=" flex justify-center items-center h-screen w-screen flex-col gap-6 bg-panel-header-background" style={{ background: 'linear-gradient(to bottom, #2D132C,#EE4540, #C72C41, #801336)' }}>
       <div className={`flex justify-center items-center text-white gap-2 `}>
