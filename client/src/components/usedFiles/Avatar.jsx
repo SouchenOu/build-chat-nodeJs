@@ -2,20 +2,42 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { FaCamera } from 'react-icons/fa';
 import ContextMenu from "./ContextMenu";
+import PhotoUpload from "./PhotoUpload";
 
 function Avatar({type, image, setImage}) {
   const [hover, setHover] = useState(false);
   const [isContextVisible, setIsContextVisible] = useState(false);
   const [ContextMenuCoordinate, SetContextMenuCoordinate] = useState({x:0, y:0});
+  const [uploadPhoto, setUploadPhoto] = useState(false)
 
   const showContextMenu = (e) =>{
     /******When an event occurs, browsers often have default actions associated with that event. For example, clicking a link might navigate to a new page, submitting a form might cause a page reload, and pressing the "Enter" key in a text input might submit the form. event.preventDefault() allows you to stop these default actions from happening. */
     e.preventDefault();
-    // SetContextMenuCoordinate({x : e.pageX, y : e.pageY});
+    SetContextMenuCoordinate({x : e.pageX, y : e.pageY});
     setIsContextVisible(true);
 
   }
-  const contextMenuOptions = [{name : "Take a picture", callback : () =>{}}]
+  const contextMenuOptions = [
+    {name : "Take a photo", callback : () =>{}},
+     {name : "Choose from Library", callback : () =>{}},
+     {name : "Upload photo", callback : () =>{
+      console.log("upload here-->", uploadPhoto);
+        setUploadPhoto(true);
+     }},
+     {name : "remove photo", callback : () =>{
+        setImage("/default-avatar.jpg")
+     }},
+
+
+
+  
+  ]
+
+
+  const photoChange = () =>{
+    console.log("enter here ues");
+
+  }
   return (
     <>
       <div className="flex items-center justify-center">
@@ -41,6 +63,9 @@ function Avatar({type, image, setImage}) {
             </div>
             {
               isContextVisible && <ContextMenu options={contextMenuOptions} cordinates={ContextMenuCoordinate} contextMenu={isContextVisible} setContextMenu={setIsContextVisible}/>
+            }
+            {
+              uploadPhoto && <PhotoUpload onChange={photoChange}/>
             }
 
         </div>
