@@ -19,9 +19,10 @@ function Avatar({type, image, setImage}) {
         </div>
        )}
        {type === "xl" && (
-        <div className="relative cursor-pointer" onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}>
-          <div className="h-40 w-40  absolute  top-0 left-0 rounded-full flex-col text-center gap-2">
+        <div className="relative cursor-pointer z-0" onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}>
+          <div className={`z-10 h-40 w-40  absolute  flex items-center justify-center gap-3 flex-col ${hover ? "visible" : "hidden" }` }>
             <FaCamera className="text-2xl" id="text-opener"/>
+            <span className=""  style={{ color: '#EE4540' }}>Change your picture</span>
           </div>
             <div className="h-40 w-40" >
               <Image src={image} alt="avatar" className="rounded-full" fill/>
