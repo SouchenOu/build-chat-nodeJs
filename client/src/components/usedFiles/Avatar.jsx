@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCamera } from 'react-icons/fa';
 import ContextMenu from "./ContextMenu";
 import PhotoUpload from "./PhotoUpload";
@@ -17,6 +17,17 @@ function Avatar({type, image, setImage}) {
     setIsContextVisible(true);
 
   }
+
+  useEffect(()=>{
+    if(uploadPhoto){
+      const data = document.getElementById("photo-picker") ;
+      data.click();
+      document.body.onfocus = (e) =>{
+        setUploadPhoto(false);
+      }
+      
+    }
+  }, [uploadPhoto])
   const contextMenuOptions = [
     {name : "Take a photo", callback : () =>{}},
      {name : "Choose from Library", callback : () =>{}},
@@ -34,8 +45,22 @@ function Avatar({type, image, setImage}) {
   ]
 
 
-  const photoChange = () =>{
+  const photoChange = async (e) =>{
     console.log("enter here ues");
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    const data= document.createElement("img");
+    reader.onload = function (event) {
+      data.src = event.target.result;
+      data.setAttribute("data-src", event.target.result);
+    };
+
+    reader.readAsDataURL(file);
+    setTimeout(()=>{
+      console.log(data.src)
+      setImage(data.src);
+    },100);
+    
 
   }
   return (
@@ -54,9 +79,9 @@ function Avatar({type, image, setImage}) {
        )}
        {type === "xl" && (
         <div className="relative cursor-pointer z-0" onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}>
-          <div className={`z-10 h-40 w-40  absolute  flex items-center justify-center gap-3 flex-col ${hover ? "visible" : "hidden" }` } onClick={(e)=>showContextMenu(e)}>
-            <FaCamera className="text-2xl" id="text-opener" onClick={(e)=>showContextMenu(e)}/>
-            <span className=""  style={{ color: '#EE4540' }}>Change your picture</span>
+          <div className={`z-10 h-40 w-40  absolute  flex items-center justify-center gap-3 flex-col ${hover ? "visible" : "hidden" }` } onClick={(e)=>showContextMenu(e)} id="context-opener">
+            <FaCamera className="text-2xl" id="context-opener" onClick={(e)=>showContextMenu(e)}/>
+            <span className=""  style={{ color: '#EE4540' }} id="context-opener">Change your picture</span>
           </div>
             <div className="h-40 w-40" >
               <Image src={image} alt="avatar" className="rounded-full" fill onClick={(e)=>showContextMenu(e)}/>

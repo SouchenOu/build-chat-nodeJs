@@ -3,9 +3,13 @@ import React, { useEffect, useRef } from "react";
 function ContextMenu({options, cordinates, contextMenu, setContextMenu}) {
   const contextMenuRef = useRef(null);
   const handleClick = (e, callback) => {
+    e.stopPropagation();
+    callback();
     setContextMenu(false);
 
   }
+
+  
   useEffect(()=>{
     const handleOutsideClick = (event) =>{
       if(event.target.id !== "context-opener"){
