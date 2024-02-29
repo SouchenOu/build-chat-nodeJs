@@ -44,7 +44,17 @@ function Avatar({type, image, setImage}) {
   
   ]
 
+/*****const file = e.target.files[0];: Extracts the selected file from the event object (e). The event is typically triggered when a user selects a file using a file input.
 
+const reader = new FileReader();: Creates a new instance of the FileReader object. The FileReader object allows you to read the contents of a Blob or File. In this case, it will be used to read the content of the selected image file.
+
+const data = document.createElement("img");: Creates a new img element using the document.createElement method. This element will be used to temporarily hold the image data before setting it as the source of the actual image element in the React component.
+
+reader.onload = function (event) { ... };: Sets up an event handler for the onload event of the FileReader. This event is triggered when the reading operation is successfully completed. Inside the event handler:
+
+data.src = event.target.result;: Sets the src attribute of the dynamically created img element (data) with the result of the file reading operation. This result is a data URL representing the contents of the image file.
+data.setAttribute("data-src", event.target.result);: Sets a data-src attribute on the img element with the same data URL. This additional attribute may be used for other purposes in the application.
+In summary, the photoChange function is designed to read the content of a selected image file, convert it into a data URL, and set it as the source of a dynamically created img element (data). This process allows for the temporary handling and previewing of the selected image before updating the actual image in the React component. */
   const photoChange = async (e) =>{
     console.log("enter here ues");
     const file = e.target.files[0];
