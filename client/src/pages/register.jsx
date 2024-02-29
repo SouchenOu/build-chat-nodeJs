@@ -34,7 +34,7 @@ function register() {
       <div className="flex flex-col items-center justify-center">
         <Input name="display_name" status="name" setState={setName} label/>
         <Input name="About" status="about" setState={setAbout} label/>
-        </div>
+      </div>
         <div>
           <Avatar type="xl" image={image} setImage={setImage}/>
         </div>

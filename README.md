@@ -1,5 +1,9 @@
 # nextjs-chat-app
 
+
+
+https://www.youtube.com/watch?v=HwCqsOis894
+
 what is Firebase :
 ------------------
 
