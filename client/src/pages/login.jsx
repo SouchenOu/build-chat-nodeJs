@@ -41,10 +41,10 @@ function login() {
         router.push("/register");
 
       }else{
-        const {id, name, email, profileImage, status} = data;
+        const {id, name, email, profilePicture : profileImage, status} = data;
         console.log("data here-->", data.data);
         dispatch({type: reducerCases.SET_NEW_USER, newUser: false})
-        dispatch({type:reducerCases.SET_USER_INFO, userInfo: {id: data.data.id, name: data.data.name, email: data.data.email, profileImage, status: ""}});
+        dispatch({type:reducerCases.SET_USER_INFO, userInfo: {id, name, email, profileImage, status}});
         router.push("/");
       }
     }
