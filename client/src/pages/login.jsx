@@ -29,8 +29,6 @@ function login() {
     const provider  = new GoogleAuthProvider();
     /****The signInWithPopup function is part of Firebase Authentication and is used for signing in a user with a pop-up window. It is commonly used for authentication providers that support pop-up-based authentication, such as Google Sign-In. */
     const {user : {displayName: name, email, photoUrl: profileImage}} = await signInWithPopup(firebaseAuth, provider);
-    console.log("email here-->", email);
-    console.log("path", check_user_Route);
     if(email){
       const {data} = await axios.post(check_user_Route, { email });
       if(!data.status){
@@ -42,6 +40,12 @@ function login() {
         })
         router.push("/register");
 
+      }else{
+        const {id, name, email, profileImage, status} = data;
+        console.log("data here-->", data.data);
+        dispatch({type: reducerCases.SET_NEW_USER, newUser: false})
+        dispatch({type:reducerCases.SET_USER_INFO, userInfo: {id: data.data.id, name: data.data.name, email: data.data.email, profileImage, status: ""}});
+        router.push("/");
       }
     }
 

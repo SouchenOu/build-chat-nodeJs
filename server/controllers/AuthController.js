@@ -10,7 +10,6 @@ export const  checkUser = async (req, res, next) =>{
         if(!user)
             return res.json({msg : "user not found", status : false});
         else{
-            console.log("enter here");
             return res.json({msg : "SignIn succefully..", status: true, data : user});
         }
 

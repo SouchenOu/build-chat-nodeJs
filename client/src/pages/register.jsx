@@ -5,10 +5,12 @@ import { reducerCases } from "@/context/constants";
 import { REGISTER_USER_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 function register() {
   const [{userInfo, newUser}] = useStateProvider();
+  const router = useRouter();
 
   const [fadeIn, setFadeIn] = useState(false);
   const[name, setName] = useState(userInfo?.name, "");
@@ -35,20 +37,23 @@ function register() {
   }, []);
 
   const handlerRegister = async () =>{
-    console.log("regiter");
     // console.log("userInfo here-->", userInfo);
     if(validateDetails())
     {
       // const email = userInfo?.email;
-      console.log("email-->", email);
       try{
         const {data} = await axios.post(REGISTER_USER_ROUTE, {email, name, about , image});
-        console.log("data here-->", data);
+    
+        if(data.msg)
+        {
+          router.push("/");
+
+        }
 
         if(data.status){
           dispatch({type:reducerCases.SET_NEW_USER, newUser : false});
-          dispatch({type: reducerCases.SET_USER_INFO, userInfo : {name, email, profileImage : image, status : about}});
-          Router.push("/")
+          dispatch({type: reducerCases.SET_USER_INFO, userInfo : {id : data.id, name, email, profileImage : image, status : about}});
+          router.push("/")
         }
 
       }catch(err){
@@ -60,7 +65,6 @@ function register() {
   }
 
   const validateDetails = () =>{
-    console.log("name here", name);
     if(name?.length < 3)
       return false;
     else
