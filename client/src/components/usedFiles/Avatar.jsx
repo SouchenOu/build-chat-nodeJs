@@ -4,6 +4,7 @@ import { FaCamera } from 'react-icons/fa';
 import ContextMenu from "./ContextMenu";
 import PhotoUpload from "./PhotoUpload";
 import PhotoLibrary from "./PhotoLibrary";
+import CapturePhoto from "./CapturePhoto";
 
 function Avatar({type, image, setImage}) {
   const [hover, setHover] = useState(false);
@@ -11,6 +12,7 @@ function Avatar({type, image, setImage}) {
   const [ContextMenuCoordinate, SetContextMenuCoordinate] = useState({x:0, y:0});
   const [uploadPhoto, setUploadPhoto] = useState(false);
   const [photoLibrary, setPhotoLibrary] = useState(false);
+  const [capturePhoto, setCapturePhoto] = useState(false);
 
   const showContextMenu = (e) =>{
     /******When an event occurs, browsers often have default actions associated with that event. For example, clicking a link might navigate to a new page, submitting a form might cause a page reload, and pressing the "Enter" key in a text input might submit the form. event.preventDefault() allows you to stop these default actions from happening. */
@@ -31,7 +33,9 @@ function Avatar({type, image, setImage}) {
     }
   }, [uploadPhoto])
   const contextMenuOptions = [
-    {name : "Take a photo", callback : () =>{}},
+    {name : "Take a photo", callback : () =>{
+      setCapturePhoto(true);
+    }},
      {name : "Choose from Library", callback : () =>{
       setPhotoLibrary(true);
      }},
@@ -110,6 +114,11 @@ In summary, the photoChange function is designed to read the content of a select
 
             {
               photoLibrary && <PhotoLibrary setImage={setImage} hidePhotoLibrary={setPhotoLibrary}/>
+            }
+
+            {
+              capturePhoto && <CapturePhoto setImage={setImage} hide={setCapturePhoto}/>
+
             }
 
         </div>
