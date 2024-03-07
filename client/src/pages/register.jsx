@@ -21,10 +21,13 @@ function register() {
 
   useEffect(()=>{
     //if it is not a new user and there is no userInfo.email 
-    if(!newUser && !userInfo?.email)
-        router.push("/login")
-    else if(!newUser && userInfo?.email)
-      router.push("/")
+    // if(!newUser && !userInfo?.email)
+    //     router.push("/login");
+    if(!newUser && userInfo?.email)
+    {
+      console.log("enter in this condition");
+      router.push("/login")
+    }
   },[])
   useEffect(() => {
     // Set an interval to toggle the fade-in effect every second
@@ -43,19 +46,16 @@ function register() {
       // const email = userInfo?.email;
       try{
         const {data} = await axios.post(REGISTER_USER_ROUTE, {email, name, about , image});
+        console.log("data register-->", data.status);
     
-        if(data.msg)
+        if(data.status)
         {
-          router.push("/");
+          const {id, name, email, profilePicture : profileImage, status} = data.data;
+          router.push("/login");
+          dispatch({type: reducerCases.SET_NEW_USER, newUser: false})
+          dispatch({type:reducerCases.SET_USER_INFO, userInfo: {id, name, email, profileImage, status}});
 
         }
-
-        if(data.status){
-          dispatch({type:reducerCases.SET_NEW_USER, newUser : false});
-          dispatch({type: reducerCases.SET_USER_INFO, userInfo : {id : data.id, name, email, profileImage : image, status : about}});
-          router.push("/")
-        }
-
       }catch(err){
 
       }
