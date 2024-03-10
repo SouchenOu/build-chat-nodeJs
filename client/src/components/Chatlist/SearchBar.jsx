@@ -4,7 +4,7 @@ import { BsFilter } from "react-icons/bs";
 
 function SearchBar() {
   return <div className=" flex py-3 items-center gap-5 pl-7" style={{ background: 'linear-gradient(to bottom, #2D132C,#EE4540, #C72C41, #801336)' }}>
-    <div className="bg-panel-header-background flex items-center gap-5 px-4">
+    <div className="bg-panel-header-background flex items-center gap-5 px-10">
         <div>
           <BiSearchAlt2 className="text-panel-header-icon cursor-pointer "/>
         </div>
