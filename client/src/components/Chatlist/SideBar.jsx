@@ -3,6 +3,7 @@ import ChatListHeader from "./ChatListHeader";
 import SearchBar from "./SearchBar";
 import List from "./List";
 import { useStateProvider } from "@/context/StateContext";
+import AllUsers from "./AllUsers";
 
 
 function SideBar() {
@@ -28,6 +29,11 @@ function SideBar() {
         <List/>
     </>
      
+    } 
+    {
+      pageType === "all-contacts" &&
+      <AllUsers/>
+
     }
     
   </div>

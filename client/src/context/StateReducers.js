@@ -22,7 +22,6 @@ const reducer = (state, action)=>{
                 userInfo: action.userInfo,
             }
         case reducerCases.SET_NEW_USER :
-            console.log("action2-->", action);
             return {
                 ...state,
                 newUser: action.newUser,

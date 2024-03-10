@@ -4,3 +4,4 @@ const AuthRoute = `${HOST}/api/auth`;
 
 export const check_user_Route = `${AuthRoute}/check-user`;
 export const REGISTER_USER_ROUTE = `${AuthRoute}/register-user`;
+export const Get_All_Users = `${AuthRoute}/All-Users`;
