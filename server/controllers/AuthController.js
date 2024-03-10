@@ -51,5 +51,39 @@ export const RegisterUser =async (req, res, next) =>{
 
 }
 
+export const getAllUsers = async (req, res, next) =>{
+
+    try{
+        //The getPrismaInstance() function is assumed to return an instance of Prisma, a modern database toolkit for Node.js and TypeScript.
+        const prisma = getPrismaInstance();
+        const users = await prisma.user.findMany({
+            orderBy: {name : "asc"},
+            select:{
+                id: true,
+                email: true,
+                name: true,
+                profilePicture: true,
+                about:true,
+            }
+        })
+    
+    const usersGroupedByInitialLetter = {};
+        users.forEach((user)=>{
+            const initialLetter = user.name.charAt(0).toUpperCase();
+            if(!usersGroupedByInitialLetter[initialLetter]){
+                usersGroupedByInitialLetter[initialLetter]=[]; 
+            }
+
+            usersGroupedByInitialLetter[initialLetter].push(user);
+        })
+        return res.status(200).send({users: usersGroupedByInitialLetter})
+
+    }catch(err){
+
+    }
+   
+    
+}
+
 
 
