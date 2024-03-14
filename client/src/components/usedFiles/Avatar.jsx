@@ -40,7 +40,6 @@ function Avatar({type, image, setImage}) {
       setPhotoLibrary(true);
      }},
      {name : "Upload photo", callback : () =>{
-      console.log("upload here-->", uploadPhoto);
         setUploadPhoto(true);
      }},
      {name : "remove photo", callback : () =>{
@@ -64,8 +63,6 @@ data.src = event.target.result;: Sets the src attribute of the dynamically creat
 data.setAttribute("data-src", event.target.result);: Sets a data-src attribute on the img element with the same data URL. This additional attribute may be used for other purposes in the application.
 In summary, the photoChange function is designed to read the content of a selected image file, convert it into a data URL, and set it as the source of a dynamically created img element (data). This process allows for the temporary handling and previewing of the selected image before updating the actual image in the React component. */
   const photoChange = async (e) =>{
-    console.log("the event is ,",e);
-    console.log("enter here ues");
     const file = e.target.files[0];
     const reader = new FileReader();
     const data= document.createElement("img");
@@ -76,7 +73,6 @@ In summary, the photoChange function is designed to read the content of a select
 
     reader.readAsDataURL(file);
     setTimeout(()=>{
-      console.log(data.src)
       setImage(data.src);
     },100);
     

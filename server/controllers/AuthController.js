@@ -2,7 +2,6 @@ import getPrismaInstance from "../utils/PrismaClient.js";
 export const  checkUser = async (req, res, next) =>{
     try{
         const {email} = req.body;
-        console.log("email hna -->", email)
 
         if(!email)
             return res.json({msg: "Email is required", status: false});
@@ -23,9 +22,6 @@ export const  checkUser = async (req, res, next) =>{
 export const RegisterUser =async (req, res, next) =>{
         try{
             const {email, name, about, image: profilePicture} = req.body;
-            console.log("server-->", name);
-            console.log("abaout here", about);
-            console.log("image",profilePicture);
             if(!email || !name || !profilePicture){
                 return res.send("Email and name are required");
 
@@ -84,6 +80,8 @@ export const getAllUsers = async (req, res, next) =>{
    
     
 }
+
+
 
 
 

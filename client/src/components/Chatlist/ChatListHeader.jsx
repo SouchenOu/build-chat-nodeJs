@@ -10,7 +10,6 @@ function ChatListHeader() {
   const handleAllContactsPage = () =>{
     dispatch({type: reducerCases.SET_ALL_CONTACTS_PAGE});
   }
-  console.log("userInfo here-->", userInfo);
   return <div className=" h-30 flex justify-between items-center px-3 py-6">
     <div className="cursor-pointer">
       <Avatar type="lg" image={userInfo?.profileImage}/>

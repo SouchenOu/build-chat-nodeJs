@@ -25,7 +25,6 @@ function register() {
     //     router.push("/login");
     if(!newUser && userInfo?.email)
     {
-      console.log("enter in this condition");
       router.push("/login")
     }
   },[])
@@ -40,13 +39,11 @@ function register() {
   }, []);
 
   const handlerRegister = async () =>{
-    // console.log("userInfo here-->", userInfo);
     if(validateDetails())
     {
       // const email = userInfo?.email;
       try{
         const {data} = await axios.post(REGISTER_USER_ROUTE, {email, name, about , image});
-        console.log("data register-->", data.status);
     
         if(data.status)
         {
@@ -70,7 +67,6 @@ function register() {
     else
       return true;
   } 
-  // console.log("user here-->", userInfo);
   return <div className="flex justify-center items-center h-screen w-screen flex-col gap-6 text-white"  style={{ background: 'linear-gradient(to bottom, #2D132C,#EE4540, #C72C41, #801336)' }}>
     <div className="flex items-center justify-center">
       <Image className={`${fadeIn ? 'opacity-500 transition-opacity duration-1000 ease-in-out' : 'opacity-0'}`} src="/chat.png" alt="chat" height={300} width={300}/>

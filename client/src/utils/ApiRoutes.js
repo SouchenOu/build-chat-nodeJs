@@ -1,7 +1,15 @@
 export const HOST = "http://localhost:8000"
 
 const AuthRoute = `${HOST}/api/auth`;
+const MessageRoute = `${HOST}/api/messages`
 
 export const check_user_Route = `${AuthRoute}/check-user`;
 export const REGISTER_USER_ROUTE = `${AuthRoute}/register-user`;
 export const Get_All_Users = `${AuthRoute}/All-Users`;
+
+
+/******messages */
+
+
+export const CREATE_MESSAGE = `${MessageRoute}/Create-message`;
+export const GET_MESSAGES = `${MessageRoute}/get-messages`;

@@ -1,0 +1,92 @@
+import getPrismaInstance from "../utils/PrismaClient.js"
+
+export const createMessage = async(req, res, next) =>{
+    try{
+        const prisma = getPrismaInstance();
+        const {content, fromId, toId} = req.body;
+        // const getUser = onlineUsers.get(toId);
+        if(content && fromId && toId){
+            const Sendmessage = await prisma.Message.create({
+                data:{
+                    content,
+                    sender:{
+                        connect: {
+                            id: parseInt(fromId)
+                        }},
+                    recipient: {
+                        connect:{
+                            id: parseInt(toId)
+                        }},
+                    // messageStatus: getUser ? "delivered" : "sent",
+
+                },
+                include : {
+                    sender: true,
+                    recipient : true,
+
+                }
+            })
+            return res.status(201).send({message: Sendmessage});
+        }
+        return res.status(400),send({message : "Message , sender and recipient users is required..."});
+
+
+    }catch(err){
+        next(err);
+    }
+}
+
+export const getMessage = async (req, res, next) =>{
+    try{
+        const prisma = getPrismaInstance();
+        const {fromId, toId} = req.params;
+        const allMessages = await prisma.Message.findMany({
+            where:{
+                OR :
+                [
+                    {
+                        senderId: parseInt(fromId),
+                        recipientId: parseInt(toId),
+                    },
+                    {
+                        senderId: parseInt(toId),
+                        recipientId : parseInt(fromId),
+                    }
+                ]
+            },
+            orderBy:{
+                id : "asc",
+            },
+          
+        });
+
+
+        const unreadMessage = [];
+        console.log("to user-->", toId);
+
+        allMessages.forEach((msg, index) => {
+            console.log("sender here-->", msg.senderId);
+            if(msg.messageStatus !== "read" && msg.senderId === parseInt(toId)){
+                console.log("this condition");
+                allMessages[index].messageStatus = "read";
+                unreadMessage.push(msg.id);
+                console.log("unread message-->", unreadMessage);
+            }
+            
+        });
+
+        await prisma.message.updateMany({
+            where :{
+                id:{in : unreadMessage}
+            },
+            data : {
+                messageStatus : "read",
+            }
+        })
+        return res.status(200).send({messages : allMessages})
+
+    }catch(err){
+
+    }
+
+}

@@ -42,19 +42,14 @@ function login() {
 
       }else{
         const {id, name, email, profilePicture : profileImage, status} = data.data;
-        console.log("data here login-->", data.data);
         dispatch({type: reducerCases.SET_NEW_USER, newUser: false})
         dispatch({type:reducerCases.SET_USER_INFO, userInfo: {id, name, email, profileImage, status}});
         router.push("/");
       }
     }
+  }
 
     
-    // alert("login");
-    // console.log("user here-->", user);
-    // console.log("data here-->", data);
-
-  }
 
   return <div className=" flex justify-center items-center h-screen w-screen flex-col gap-6 bg-panel-header-background" style={{ background: 'linear-gradient(to bottom, #2D132C,#EE4540, #C72C41, #801336)' }}>
       <div className={`flex justify-center items-center text-white gap-2 `}>
@@ -68,7 +63,8 @@ function login() {
 
       </button>
     
-    </div>;
+    </div>
 }
+
 
 export default login;

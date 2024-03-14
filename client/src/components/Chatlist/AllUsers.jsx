@@ -17,7 +17,6 @@ function AllUsers() {
       try{
           const {data : {users}} =  await axios.get(Get_All_Users);
           setAllUsers(users);
-          console.log("allUsers-->", AllUsers);
       }catch(err){
 
       }

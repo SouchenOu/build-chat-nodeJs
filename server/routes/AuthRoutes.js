@@ -7,4 +7,5 @@ router.post("/check-user", checkUser);
 router.post("/register-user" , RegisterUser);
 router.get("/All-Users", getAllUsers);
 
+
 export default router;

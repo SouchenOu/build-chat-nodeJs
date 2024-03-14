@@ -10,7 +10,6 @@ function SideBar() {
   const [{contactsPage}] = useStateProvider();
   const [pageType, setPageType] = useState("");
 
-  console.log("constactsPage", contactsPage);
 
   useEffect(()=>{
     if(contactsPage)
