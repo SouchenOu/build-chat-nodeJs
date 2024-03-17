@@ -57,6 +57,9 @@ export const getMessage = async (req, res, next) =>{
             orderBy:{
                 id : "asc",
             },
+            include: {
+                sender: true, // Include all fields of the sender
+            },
           
         });
 
