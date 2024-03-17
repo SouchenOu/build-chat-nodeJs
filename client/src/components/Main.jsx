@@ -53,7 +53,7 @@ function Main() {
       console.log("messages here", messages);
      
     }
-    if(currentChatUser?.id)
+    if(currentChatUser?.id && userInfo?.id)
     {
       getMessage();
     }
