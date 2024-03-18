@@ -69,6 +69,7 @@ export const getMessage = async (req, res, next) =>{
 
         allMessages.forEach((msg, index) => {
             console.log("sender here-->", msg.senderId);
+            //sent is the default (and there is read and delevered)
             if(msg.messageStatus !== "read" && msg.senderId === parseInt(toId)){
                 console.log("this condition");
                 allMessages[index].messageStatus = "read";
@@ -77,7 +78,8 @@ export const getMessage = async (req, res, next) =>{
             }
             
         });
-
+            /****{ where: { id: { in: unreadMessage } } }: This is the condition specifying which messages should be updated. It's saying to update messages where the id is included in the array unreadMessage.
+             *  This implies that unreadMessage is an array containing IDs of messages that are unread. */
         await prisma.message.updateMany({
             where :{
                 id:{in : unreadMessage}

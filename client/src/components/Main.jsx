@@ -13,7 +13,7 @@ import Chat from "./Chat/Chat";
 
 function Main() {
   const router = useRouter();
-  const [{userInfo, currentChatUser, messages}, dispatch] = useStateProvider()
+  const [{userInfo, currentChatUser, messages}, dispatch] = useStateProvider();
 
   const [redirectLogin, setRedirectLogin] = useState(false);
   useEffect(()=>{

@@ -61,7 +61,7 @@ function AllUsers() {
     </div>
 
     
-  </div>;
+  </div>
 }
 
 export default AllUsers;

@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }) {
         <title>SoukeyChat</title>
         <link href="/chat.png"></link>
       </Head>
-       <Component {...pageProps} />;
+       <Component {...pageProps} />
 
     </StateProvider>
   )
