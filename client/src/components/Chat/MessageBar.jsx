@@ -3,7 +3,7 @@ import { reducerCases } from "@/context/constants";
 import { CREATE_MESSAGE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
 import {ImAttachment} from "react-icons/im"
@@ -14,6 +14,28 @@ function MessageBar() {
   console.log("socket here-->", socket);
   const [message, setMessage] = useState("");
   const [ showEmojiPicker, setshowEmojiPicker] = useState(false);
+  const EmojiRef = useRef(null);
+
+
+  useEffect(()=>{
+
+    const handleOutsideClick = (event) =>{
+      console.log("target here-->", event.target.id);
+      if(event.target.id !== "open-emoji"){
+        if(EmojiRef.current  && !EmojiRef.current.contains(event.target)){
+          setshowEmojiPicker(false);
+        }
+
+      }
+
+    }
+
+    document.addEventListener("click", handleOutsideClick);
+    return ()=>{
+      document.removeEventListener("click", handleOutsideClick);
+    }
+
+  },[])
   const handleEmoji = () =>{
     setshowEmojiPicker(!showEmojiPicker);
   }
@@ -36,8 +58,8 @@ function MessageBar() {
   }
   return <div className="h-20 bg-panel-header-background flex items-center justify-center gap-6  px-4 relative ">
       <div className="flex gap-8">
-        <BsEmojiSmile id="emoji-opne" onClick={handleEmoji}className="text-panel-header-icon cursor-pointer text-xl" title="Emoji"/>
-          {showEmojiPicker && <div className=" absolute bottom-24 left-16 z-index"><EmojiPicker onEmojiClick={handleEmojiClick} theme="dark"/></div>}
+        <BsEmojiSmile id="open-emoji" onClick={handleEmoji}className="text-panel-header-icon cursor-pointer text-xl" title="Emoji"/>
+          {showEmojiPicker && <div ref={EmojiRef} className=" absolute bottom-24 left-16 z-index"><EmojiPicker onEmojiClick={handleEmojiClick} theme="dark"/></div>}
         <ImAttachment className="text-panel-header-icon cursor-pointer text-xl" title="Attach file"/>
       </div>
       <div className="h-10 w-full rounded-lg flex items-center">
