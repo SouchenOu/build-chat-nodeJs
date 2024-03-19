@@ -2,6 +2,7 @@ import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 import { CREATE_MESSAGE } from "@/utils/ApiRoutes";
 import axios from "axios";
+import EmojiPicker from "emoji-picker-react";
 import React, { useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
@@ -12,6 +13,15 @@ function MessageBar() {
   const [{userInfo, currentChatUser, socket}, dispatch] = useStateProvider();
   console.log("socket here-->", socket);
   const [message, setMessage] = useState("");
+  const [ showEmojiPicker, setshowEmojiPicker] = useState(false);
+  const handleEmoji = () =>{
+    setshowEmojiPicker(!showEmojiPicker);
+  }
+  const handleEmojiClick = (emoji) =>{
+    setMessage((prevMessage)=>(prevMessage += emoji.emoji));
+    console.log("message hna-->", message);
+
+  }
   const sendMessage = async () =>{
     alert("hello message");
     try{
@@ -26,11 +36,12 @@ function MessageBar() {
   }
   return <div className="h-20 bg-panel-header-background flex items-center justify-center gap-6  px-4 relative ">
       <div className="flex gap-8">
-        <BsEmojiSmile className="text-panel-header-icon cursor-pointer text-xl" title="Emogi"/>
+        <BsEmojiSmile id="emoji-opne" onClick={handleEmoji}className="text-panel-header-icon cursor-pointer text-xl" title="Emoji"/>
+          {showEmojiPicker && <div className=" absolute bottom-24 left-16 z-index"><EmojiPicker onEmojiClick={handleEmojiClick} theme="dark"/></div>}
         <ImAttachment className="text-panel-header-icon cursor-pointer text-xl" title="Attach file"/>
       </div>
       <div className="h-10 w-full rounded-lg flex items-center">
-          <input type="text" placeholder="Type a message " onChange={(e)=>setMessage(e.target.value)} className="bg-input-background text-sm text-white h-10 w-full py-3 px-5 focus:outline-none rounded-lg"/>
+          <input value={message} type="text" placeholder="Type a message " onChange={(e)=>setMessage(e.target.value)} className="bg-input-background text-sm text-white h-10 w-full py-3 px-5 focus:outline-none rounded-lg"/>
       </div>
       <div className="flex w-10 items-center justify-center">
           <button className="flex text-panel-header-icon px-3 py-1 gap-3" style={{ background: 'linear-gradient(to bottom, #C72C41, #801336)' }} > 

@@ -52,7 +52,6 @@ function Main() {
       if(userInfo){
         console.log("this is new user");
         socket.current = io(HOST);
-        console.log("current hna-->", socket.current);
         socket.current.emit("add-user", userInfo.id);
         dispatch({type: reducerCases.SET_SOCKET, socket});
       }
@@ -69,7 +68,6 @@ function Main() {
   },[socket.current, socketEvent])
 
   useEffect(()=>{
-    console.log("enter here");
     
     const getMessage = async() =>{
       const {data : {messages}} = await axios.get(`${GET_MESSAGES}/${userInfo.id}/${currentChatUser.id}`);
