@@ -8,12 +8,14 @@ import {ImAttachment} from "react-icons/im"
 import { MdSend } from "react-icons/md";
 
 function MessageBar() {
-  const [{userInfo, currentChatUser}] = useStateProvider();
+  const [{userInfo, currentChatUser, socket}] = useStateProvider();
+  console.log("socket here-->", socket);
   const [message, setMessage] = useState("");
   const sendMessage = async () =>{
     alert("hello message");
     try{
-      const {data} = await axios.post(CREATE_MESSAGE, {toId : currentChatUser.id, fromId: userInfo.id, content : message})
+      const {data} = await axios.post(CREATE_MESSAGE, {toId : currentChatUser.id, fromId: userInfo.id, content : message});
+      socket.current.emit("send-message", {toId : currentChatUser.id, fromId: userInfo.id, content : data.message})
       
     }catch(err){
 

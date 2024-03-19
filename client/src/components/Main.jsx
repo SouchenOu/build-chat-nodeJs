@@ -1,21 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import ConversationPanel from "./ConversationPanel";
 import SideBar from "./Chatlist/SideBar";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "@/utils/FirebaseConfig";
 import axios, { Axios } from "axios";
-import { GET_MESSAGES, check_user_Route } from "@/utils/ApiRoutes";
+import { GET_MESSAGES, HOST, check_user_Route } from "@/utils/ApiRoutes";
 import { useRouter } from "next/router";
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 import Chat from "./Chat/Chat";
+import { io } from "socket.io-client";
 
 function Main() {
   const router = useRouter();
   const [{userInfo, currentChatUser, messages}, dispatch] = useStateProvider();
 
   const [redirectLogin, setRedirectLogin] = useState(false);
+  const [socketEvent, setSocketEvent] = useState(false);
+  const socket = useRef()
   useEffect(()=>{
     if(redirectLogin)
       router.push("/login");
@@ -42,7 +45,33 @@ function Main() {
     }
    
 
-  })
+  });
+// this useEffect will run when the userInfo changed
+  useEffect(()=>{
+    console.log("userInfo test-->", userInfo);
+      if(userInfo){
+        console.log("this is new user");
+        socket.current = io(HOST);
+        console.log("current hna-->", socket.current);
+        socket.current.emit("add-user", userInfo.id);
+        dispatch({type: reducerCases.SET_SOCKET, socket});
+      }
+  },[userInfo]);
+
+  useEffect(()=>{
+    console.log("socket current here-->", socket.current);
+    if(socket.current && !socketEvent){
+      console.log("message receive succefuly");
+      socket.current.on("message-receive", (data)=>{
+        console.log("yes yes", data);
+        // console.log("message receive here");
+        // console.log("enter here socket");
+        dispatch({type: reducerCases.ADD_MESSAGE, newMessage:{...data.message}})
+      })
+      setSocketEvent(true);
+    }
+  },[socket.current, socketEvent])
+
   useEffect(()=>{
     console.log("enter here");
     
