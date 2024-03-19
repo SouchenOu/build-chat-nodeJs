@@ -8,14 +8,19 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
 import {ImAttachment} from "react-icons/im"
 import { MdSend } from "react-icons/md";
+import PhotoUpload from "../usedFiles/PhotoUpload";
 
 function MessageBar() {
   const [{userInfo, currentChatUser, socket}, dispatch] = useStateProvider();
   console.log("socket here-->", socket);
   const [message, setMessage] = useState("");
-  const [ showEmojiPicker, setshowEmojiPicker] = useState(false);
+  const [showEmojiPicker, setshowEmojiPicker] = useState(false);
+  const [grabPhoto, setgrabPhoto] = useState(false);
   const EmojiRef = useRef(null);
 
+  const photoPickerChange = async (e) =>{
+    console.log("event here-->", e.target.files[0]);
+  }
 
   useEffect(()=>{
 
@@ -56,11 +61,22 @@ function MessageBar() {
     }
 
   }
+
+  useEffect(()=>{
+    if(grabPhoto){
+      const data = document.getElementById("photo-picker") ;
+      data.click();
+      document.body.onfocus = (e) =>{
+        setgrabPhoto(false);
+      }
+      
+    }
+  }, [grabPhoto])
   return <div className="h-20 bg-panel-header-background flex items-center justify-center gap-6  px-4 relative ">
       <div className="flex gap-8">
         <BsEmojiSmile id="open-emoji" onClick={handleEmoji}className="text-panel-header-icon cursor-pointer text-xl" title="Emoji"/>
           {showEmojiPicker && <div ref={EmojiRef} className=" absolute bottom-24 left-16 z-index"><EmojiPicker onEmojiClick={handleEmojiClick} theme="dark"/></div>}
-        <ImAttachment className="text-panel-header-icon cursor-pointer text-xl" title="Attach file"/>
+        <ImAttachment onClick={()=> setgrabPhoto(true)}className="text-panel-header-icon cursor-pointer text-xl" title="Attach file"/>
       </div>
       <div className="h-10 w-full rounded-lg flex items-center">
           <input value={message} type="text" placeholder="Type a message " onChange={(e)=>setMessage(e.target.value)} className="bg-input-background text-sm text-white h-10 w-full py-3 px-5 focus:outline-none rounded-lg"/>
@@ -71,6 +87,7 @@ function MessageBar() {
             <FaMicrophone className="text-panel-header-icon cursor-pointer text-xl" title="Send  record"/>
           </button>
       </div>
+      {grabPhoto && <PhotoUpload onChange={photoPickerChange}/>}
 
 
    
