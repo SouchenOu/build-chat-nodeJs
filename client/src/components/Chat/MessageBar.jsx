@@ -1,4 +1,5 @@
 import { useStateProvider } from "@/context/StateContext";
+import { reducerCases } from "@/context/constants";
 import { CREATE_MESSAGE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import React, { useState } from "react";
@@ -8,14 +9,15 @@ import {ImAttachment} from "react-icons/im"
 import { MdSend } from "react-icons/md";
 
 function MessageBar() {
-  const [{userInfo, currentChatUser, socket}] = useStateProvider();
+  const [{userInfo, currentChatUser, socket}, dispatch] = useStateProvider();
   console.log("socket here-->", socket);
   const [message, setMessage] = useState("");
   const sendMessage = async () =>{
     alert("hello message");
     try{
       const {data} = await axios.post(CREATE_MESSAGE, {toId : currentChatUser.id, fromId: userInfo.id, content : message});
-      socket.current.emit("send-message", {toId : currentChatUser.id, fromId: userInfo.id, content : data.message})
+      socket.current.emit("send-message", {toId : currentChatUser.id, fromId: userInfo.id, content : data.message});
+      dispatch({type: reducerCases.ADD_MESSAGE, newMessage: {...data.message}, fromSelf : true});
       
     }catch(err){
 

@@ -59,13 +59,9 @@ function Main() {
   },[userInfo]);
 
   useEffect(()=>{
-    console.log("socket current here-->", socket.current);
     if(socket.current && !socketEvent){
-      console.log("message receive succefuly");
       socket.current.on("message-receive", (data)=>{
-        console.log("yes yes", data);
-        // console.log("message receive here");
-        // console.log("enter here socket");
+       
         dispatch({type: reducerCases.ADD_MESSAGE, newMessage:{...data.message}})
       })
       setSocketEvent(true);
