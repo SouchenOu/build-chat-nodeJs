@@ -1,6 +1,6 @@
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
-import { CREATE_MESSAGE } from "@/utils/ApiRoutes";
+import { ADD_IMAGE_MESSAGE_ROUTES, CREATE_MESSAGE } from "@/utils/ApiRoutes";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
@@ -12,20 +12,33 @@ import PhotoUpload from "../usedFiles/PhotoUpload";
 
 function MessageBar() {
   const [{userInfo, currentChatUser, socket}, dispatch] = useStateProvider();
-  console.log("socket here-->", socket);
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setshowEmojiPicker] = useState(false);
   const [grabPhoto, setgrabPhoto] = useState(false);
   const EmojiRef = useRef(null);
 
   const photoPickerChange = async (e) =>{
-    console.log("event here-->", e.target.files[0]);
+    try{
+      console.log("enter here photo");
+      const file = e.target.files[0];
+      console.log("file here-->", file);
+      const formData = new FormData();
+      formData.append("image", file);
+      const response = await axios.post(ADD_IMAGE_MESSAGE_ROUTES , formData,{headers : {"Content-Type" : "multipart/form-data"}, params : {fromId : userInfo.id, toId: currentChatUser.id}})
+      console.log("resonse here-->", response);
+      if(response.status === 201){
+        socket.current.emit('send-message',{toId : currentChatUser.id, fromId : userInfo.id, content: response.data.message.content});
+        dispatch({type: reducerCases.ADD_MESSAGE, newMessage : {...response.data.message}, fromSelf : true});
+        console.log("message here-->", message);
+      }
+    }catch(err){
+
+    }
   }
 
   useEffect(()=>{
 
     const handleOutsideClick = (event) =>{
-      console.log("target here-->", event.target.id);
       if(event.target.id !== "open-emoji"){
         if(EmojiRef.current  && !EmojiRef.current.contains(event.target)){
           setshowEmojiPicker(false);
@@ -46,7 +59,6 @@ function MessageBar() {
   }
   const handleEmojiClick = (emoji) =>{
     setMessage((prevMessage)=>(prevMessage += emoji.emoji));
-    console.log("message hna-->", message);
 
   }
   const sendMessage = async () =>{

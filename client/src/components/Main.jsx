@@ -15,6 +15,7 @@ import { io } from "socket.io-client";
 function Main() {
   const router = useRouter();
   const [{userInfo, currentChatUser, messages}, dispatch] = useStateProvider();
+  console.log("message main-->", messages);
 
   const [redirectLogin, setRedirectLogin] = useState(false);
   const [socketEvent, setSocketEvent] = useState(false);
@@ -48,9 +49,7 @@ function Main() {
   });
 // this useEffect will run when the userInfo changed
   useEffect(()=>{
-    console.log("userInfo test-->", userInfo);
       if(userInfo){
-        console.log("this is new user");
         socket.current = io(HOST);
         socket.current.emit("add-user", userInfo.id);
         dispatch({type: reducerCases.SET_SOCKET, socket});
@@ -72,8 +71,6 @@ function Main() {
     const getMessage = async() =>{
       const {data : {messages}} = await axios.get(`${GET_MESSAGES}/${userInfo.id}/${currentChatUser.id}`);
       dispatch({type:reducerCases.SET_MESSAGES, messages})
-      // console.log("data messages here-->", data);
-      console.log("messages here", messages);
      
     }
     if(currentChatUser?.id && userInfo?.id)

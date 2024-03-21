@@ -12,6 +12,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+
+app.use("/uploads/images", express.static("uploads/images"));
 app.use("/api/auth", AuthRoutes);
 app.use("/api/messages",MessageRoutes);
 
@@ -45,20 +48,14 @@ this socket globally, presumably for handling chat-related functionality. */
  * and assigns the connected socket to a global variable for further interaction within the application. */
 global.onlineUsers = new Map();
 io.on("connection", (socket) =>{
-    console.log("connection");
-    // console.log("socket here-->", socket);
     global.chatSocket = socket;
     socket.on("add-user", (userId) =>{
-        console.log("add-user");
         onlineUsers.set(userId, socket.id)
     });
-    console.log("online users here-->", onlineUsers);
     socket.on("send-message", (data)=>{
-        console.log("yes send");
-        console.log("data here-->", data);
+        console.log("data send backend -->", data);
         const sendUserSocket = onlineUsers.get(data.toId);
     
-        console.log("send user-->", sendUserSocket);
         if(sendUserSocket){
             socket.to(sendUserSocket).to(data.fromId).emit("message-receive", {
                 fromId: data.fromId,

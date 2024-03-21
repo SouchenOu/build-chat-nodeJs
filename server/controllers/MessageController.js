@@ -1,3 +1,4 @@
+import { renameSync } from "fs";
 import getPrismaInstance from "../utils/PrismaClient.js"
 
 export const createMessage = async(req, res, next) =>{
@@ -65,16 +66,12 @@ export const getMessage = async (req, res, next) =>{
 
 
         const unreadMessage = [];
-        console.log("to user-->", toId);
 
         allMessages.forEach((msg, index) => {
-            console.log("sender here-->", msg.senderId);
             //sent is the default (and there is read and delevered)
             if(msg.messageStatus !== "read" && msg.senderId === parseInt(toId)){
-                console.log("this condition");
                 allMessages[index].messageStatus = "read";
                 unreadMessage.push(msg.id);
-                console.log("unread message-->", unreadMessage);
             }
             
         });
@@ -91,6 +88,56 @@ export const getMessage = async (req, res, next) =>{
         return res.status(200).send({messages : allMessages})
 
     }catch(err){
+
+    }
+
+}
+
+
+export const addImage = async (req, res, next) =>{
+    try{
+        console.log("enter here backend");
+        if(req.file){
+            const date = Date.now();
+            let filename = "uploads/images/" + date + req.file.originalname;
+            console.log("filename here backend-->", filename);
+            console.log("path-->", req.file.path);
+            renameSync(req.file.path, filename);
+            const prisma = getPrismaInstance();
+            const {fromId , toId} = req.query;
+            if(fromId && toId){
+                const message = await prisma.Message.create({
+                    data:{
+                        content: filename,
+                        sender :{
+                            connect : {
+                                id : parseInt(fromId)
+                            }
+                        },
+                        recipient : {
+                            connect : {
+                                id : parseInt(toId)
+                            }
+                        },
+                        type : "image",
+                        
+                    },
+                    include : {
+                        sender: true,
+                        recipient : true,
+    
+                    }
+
+            })
+                return res.status(201).json({message});
+
+            }
+            return res.status(400).send("FromId and toId is required");
+
+        }
+            return res.status(400).send("Image is required");
+    }catch(err){
+        next(err);
 
     }
 
