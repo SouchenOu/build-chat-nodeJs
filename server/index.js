@@ -53,9 +53,10 @@ io.on("connection", (socket) =>{
         onlineUsers.set(userId, socket.id)
     });
     socket.on("send-message", (data)=>{
-        console.log("data send backend -->", data);
+        console.log("data here-->", data);
         const sendUserSocket = onlineUsers.get(data.toId);
-    
+        console.log("online users-->", onlineUsers);
+        console.log("sender here-->", sendUserSocket);
         if(sendUserSocket){
             socket.to(sendUserSocket).to(data.fromId).emit("message-receive", {
                 fromId: data.fromId,

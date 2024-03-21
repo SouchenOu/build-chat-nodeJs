@@ -15,7 +15,6 @@ import { io } from "socket.io-client";
 function Main() {
   const router = useRouter();
   const [{userInfo, currentChatUser, messages}, dispatch] = useStateProvider();
-  console.log("message main-->", messages);
 
   const [redirectLogin, setRedirectLogin] = useState(false);
   const [socketEvent, setSocketEvent] = useState(false);
@@ -59,12 +58,13 @@ function Main() {
   useEffect(()=>{
     if(socket.current && !socketEvent){
       socket.current.on("message-receive", (data)=>{
+        console.log("message hna-->", data);
        
         dispatch({type: reducerCases.ADD_MESSAGE, newMessage:{...data.message}})
       })
       setSocketEvent(true);
     }
-  },[socket.current, socketEvent])
+  },[socket.current])
 
   useEffect(()=>{
     
