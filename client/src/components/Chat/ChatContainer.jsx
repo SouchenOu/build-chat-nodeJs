@@ -1,16 +1,23 @@
 import { useStateProvider } from "@/context/StateContext";
 import { calculateTime } from "@/utils/CalculateTime";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import MessageStatus from "../usedFiles/MessageStatus";
 import { HOST } from "@/utils/ApiRoutes";
 
 function ChatContainer() {
   const [{messages, userInfo, currentChatUser}] = useStateProvider();
 
+  const chatContainerRef = useRef(null);
 
+  useEffect(() => {
+    // Scroll to the bottom of the chat container when messages change
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
-  return <div className="h-[80vh]  relative overflow-auto flex-grow custom-scrollbar">
+  return <div className="h-[80vh]  relative overflow-auto flex-grow custom-scrollbar" ref={chatContainerRef}>
       <div className="mx-5 my-3">
         <div className="flex flex-col justify-end w-full gap-1 ">
               {

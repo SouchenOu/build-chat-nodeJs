@@ -93,12 +93,50 @@ export const getMessage = async (req, res, next) =>{
 
 }
 
+/*****export const addImage = async (req, res, next) => { ... }: This function is exported as addImage and is designed to handle requests related to adding images. It is an asynchronous function, meaning it can operate asynchronously and use await inside it.
 
+try { ... } catch (err) { ... }: The function is wrapped in a try-catch block to handle any errors that might occur during its execution.
+
+if (req.file) { ... }: Checks if the request contains a file. This typically indicates that an image file has been uploaded to the server.
+
+console.log("file here-->", req.file);: Logs the uploaded file object to the console for debugging purposes.
+
+const date = Date.now();: Gets the current timestamp, which is used to generate a unique filename.
+
+let filename = "uploads/images/" + date + req.file.originalname;: Constructs a filename for the uploaded image by concatenating the timestamp with the original name of the file.
+
+renameSync(req.file.path, filename);: Renames the temporary file path to the constructed filename. This is assuming renameSync is a synchronous function that renames files.
+
+const prisma = getPrismaInstance();: Retrieves an instance of Prisma, an ORM (Object-Relational Mapping) tool for interfacing with a database. The specific function getPrismaInstance() is assumed to be defined elsewhere in the code.
+
+const { fromId, toId } = req.query;: Destructures the fromId and toId query parameters from the request URL. These are likely used to determine the sender and recipient of the image message.
+
+if (fromId && toId) { ... }: Checks if both fromId and toId are provided in the request.
+
+Inside the if block, it creates a new message in the database using Prisma's Message.create() method. It includes the filename of the image, sender, recipient, and sets the type of the message as "image". It then returns a JSON response with the created message.
+
+If fromId and toId are not provided, it returns a 400 Bad Request status with a message indicating that these parameters are required.
+
+If no image file is uploaded, it returns a 400 Bad Request status with a message indicating that an image is required.
+
+catch (err) { next(err); }: If an error occurs during the execution of the function, it calls the next function with the err parameter to pass the error to the next error-handling middleware.
+
+Overall, this function handles the uploading of an image file, renames it, saves information about it in a database using Prisma, and responds accordingly based on the success or failure of these operations.
+
+
+
+
+
+
+ */
 export const addImage = async (req, res, next) =>{
     try{
         if(req.file){
+            console.log("file here-->", req.file);
             const date = Date.now();
             let filename = "uploads/images/" + date + req.file.originalname;
+            console.log("original name", req.file.originalname);
+            console.log("filename-->", filename);
             renameSync(req.file.path, filename);
             const prisma = getPrismaInstance();
             const {fromId , toId} = req.query;
