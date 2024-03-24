@@ -99,7 +99,7 @@ try { ... } catch (err) { ... }: The function is wrapped in a try-catch block to
 
 if (req.file) { ... }: Checks if the request contains a file. This typically indicates that an image file has been uploaded to the server.
 
-console.log("file here-->", req.file);: Logs the uploaded file object to the console for debugging purposes.
+// console.log("file here-->", req.file);: Logs the uploaded file object to the console for debugging purposes.
 
 const date = Date.now();: Gets the current timestamp, which is used to generate a unique filename.
 
@@ -132,11 +132,8 @@ Overall, this function handles the uploading of an image file, renames it, saves
 export const addImage = async (req, res, next) =>{
     try{
         if(req.file){
-            console.log("file here-->", req.file);
             const date = Date.now();
             let filename = "uploads/images/" + date + req.file.originalname;
-            console.log("original name", req.file.originalname);
-            console.log("filename-->", filename);
             renameSync(req.file.path, filename);
             const prisma = getPrismaInstance();
             const {fromId , toId} = req.query;
