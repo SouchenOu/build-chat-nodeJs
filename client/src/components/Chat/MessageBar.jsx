@@ -9,7 +9,22 @@ import { FaMicrophone } from "react-icons/fa";
 import {ImAttachment} from "react-icons/im"
 import { MdSend } from "react-icons/md";
 import PhotoUpload from "../usedFiles/PhotoUpload";
-import CaptureAudio from "../usedFiles/CaptureAudio";
+// import CaptureAudio from "../usedFiles/CaptureAudio";
+
+
+/*******Regular Import (import CaptureAudio from "../usedFiles/CaptureAudio";):
+
+With a regular import statement, the referenced module (CaptureAudio in this case) will be imported synchronously at the time the module containing the import statement is parsed. This means that the module will be loaded and executed before the rest of the code in the importing module continues to execute.
+This type of import is static, meaning that the module dependency is resolved and loaded during the build time.
+Dynamic Import (const captureAudio = dynamic(() => import("../usedFiles/CaptureAudio"), {ssr: false})):
+
+Dynamic imports, as the name suggests, allow you to import modules dynamically at runtime, rather than statically at build time. The dynamic function from Next.js enables this behavior.
+The module referenced in the dynamic import ("../usedFiles/CaptureAudio") is loaded asynchronously when the function (dynamic) is called. It will be fetched and executed only when the code reaches that point during runtime.
+Dynamic imports are particularly useful for components or modules that are not needed immediately upon page load or that are conditionally loaded based on user interactions or other runtime conditions.
+Additionally, in the specific case of Next.js, the {ssr: false} option is provided to specify that this component should not be server-side rendered, indicating that it should only be loaded on the client side. */
+import dynamic from "next/dynamic";
+
+const captureAudio = dynamic(() => import("../usedFiles/CaptureAudio"), {ssr: false})
 
 function MessageBar() {
   const [{userInfo, currentChatUser, socket}, dispatch] = useStateProvider();

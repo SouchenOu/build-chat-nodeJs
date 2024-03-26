@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 import MessageStatus from "../usedFiles/MessageStatus";
 import { HOST } from "@/utils/ApiRoutes";
+import VoiceMessage from "./VoiceMessage";
 
 function ChatContainer() {
   const [{messages, userInfo, currentChatUser}] = useStateProvider();
@@ -44,7 +45,12 @@ function ChatContainer() {
                             <span>{message.senderId === userInfo.id && <messageStatus MessageStatus={message.messageStatus}/>}</span>
                           </div>
                         </div>
-                        </div>}
+                      </div>}
+                        {
+                          message.type === 'audio' && <VoiceMessage/>
+                          
+
+                        }
 
                     </div>
                   ))
