@@ -5,6 +5,11 @@ import React, { useEffect, useRef } from "react";
 import MessageStatus from "../usedFiles/MessageStatus";
 import { HOST } from "@/utils/ApiRoutes";
 import VoiceMessage from "./VoiceMessage";
+import dynamic from "next/dynamic";
+import ImageMessage from "./ImageMessage";
+
+
+// const VoiceMessage = dynamic(()=> import("./VoiceMessage"), {ssr : false})
 
 function ChatContainer() {
   const [{messages, userInfo, currentChatUser}] = useStateProvider();
@@ -12,6 +17,7 @@ function ChatContainer() {
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
+    
     // Scroll to the bottom of the chat container when messages change
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -45,9 +51,11 @@ function ChatContainer() {
                             <span>{message.senderId === userInfo.id && <messageStatus MessageStatus={message.messageStatus}/>}</span>
                           </div>
                         </div>
-                      </div>}
+                      </div>
+                      }
+                        
                         {
-                          message.type === 'audio' && <VoiceMessage/>
+                          message.type === 'audio' && <VoiceMessage message={message}/>
                           
 
                         }

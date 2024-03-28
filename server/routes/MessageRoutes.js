@@ -5,8 +5,8 @@ import multer from "multer";
 
 const router = Router();
 
-const uploadImage = multer({dest : "uploads/images"});
 const uploadAudio = multer({dest : "uploads/recordings"});
+const uploadImage = multer({dest : "uploads/images"});
 
 router.post("/Create-message", createMessage);
 router.get("/get-messages/:fromId/:toId", getMessage);

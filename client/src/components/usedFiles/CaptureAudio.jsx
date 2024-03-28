@@ -39,27 +39,38 @@ function CaptureAudio({hide}) {
         clearInterval(interval)
       }
   },[Isrecording])
-  useEffect(()=>{
-    const wavesufer = WaveSurfer.create({
-      container : waveFormRef.current,
-      waveColor: "#ccc",
-      progressColor: "#4a9eff",
-      cursorColor:"#7ae3c3",
-      barWidth: 2,
-      height: 30,
-      responsive : true,
+  // useEffect(()=>{
+  //   const wavesufer = WaveSurfer.create({
+  //     container : waveFormRef.current,
+  //     waveColor: "#ccc",
+  //     progressColor: "#4a9eff",
+  //     cursorColor:"#7ae3c3",
+  //     barWidth: 2,
+  //     height: 30,
+  //     responsive : true,
+  //   });
+
+  //   setWaveForm(wavesufer);
+  //   wavesufer.on("finish", () =>{
+  //     setIsPlaying(false);
+
+  //   });
+  //   return () =>{
+  //     wavesufer.destroy();
+  //   };
+
+  // },[]);
+  useEffect(() => {
+    waveformRef.current = WaveSurfer.create({
+      container: "#waveform",
     });
 
-    setWaveForm(wavesufer);
-    wavesufer.on("finish", () =>{
-      setIsPlaying(false);
-
-    });
-    return () =>{
-      wavesufer.destroy();
+    return () => {
+      if (waveFormRef.current) {
+        waveFormRef.current.destroy();
+      }
     };
-
-  },[]);
+  }, []);
 
   useEffect(()=>{
     if(waveForm){

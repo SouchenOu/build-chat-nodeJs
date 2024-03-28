@@ -23,8 +23,9 @@ The module referenced in the dynamic import ("../usedFiles/CaptureAudio") is loa
 Dynamic imports are particularly useful for components or modules that are not needed immediately upon page load or that are conditionally loaded based on user interactions or other runtime conditions.
 Additionally, in the specific case of Next.js, the {ssr: false} option is provided to specify that this component should not be server-side rendered, indicating that it should only be loaded on the client side. */
 import dynamic from "next/dynamic";
+import CaptureAudio from "../usedFiles/CaptureAudio";
 
-const captureAudio = dynamic(() => import("../usedFiles/CaptureAudio"), {ssr: false})
+// const CaptureAudio = dynamic(() => import("../usedFiles/CaptureAudio"), {ssr: false})
 
 function MessageBar() {
   const [{userInfo, currentChatUser, socket}, dispatch] = useStateProvider();

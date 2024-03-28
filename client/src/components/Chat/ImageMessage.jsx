@@ -1,7 +1,13 @@
+import { HOST } from "@/utils/ApiRoutes";
 import React from "react";
 
-function ImageMessage() {
-  return <div>ImageMessage</div>;
+function ImageMessage({message}) {
+
+  const testMessage = `${HOST}/${message.content}`;
+  console.log("testMessage-->", testMessage);
+  return <div>
+
+  </div>;
 }
 
 export default ImageMessage;
