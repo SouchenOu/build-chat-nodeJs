@@ -5,7 +5,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { FaMicrophone, FaPauseCircle, FaPlay, FaStop, FaTrash } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
-import WaveSurfer from "wavesurfer.js";
+// import WaveSurfer from "wavesurfer.js";
 
 
 function CaptureAudio({hide}) {
@@ -173,12 +173,10 @@ function CaptureAudio({hide}) {
   }
 
   const sendRecording = async () =>{
-    console.log("enter here recording");
     try{
       const formData = new FormData();
       formData.append("audio", rendredAudio);
       const response = await axios.post(ADD_AUDIO_MESSAGE_ROUTES, formData,{headers : {"Content-Type" : "multipart/form-data"}, params : {fromId : userInfo.id, toId: currentChatUser.id}});
-      console.log("response here-->", response);
       if(response.status === 201){
         socket.current.emit('send-message',{toId : currentChatUser.id, fromId : userInfo.id, content: response.data.message.content});
         dispatch({type: reducerCases.ADD_MESSAGE, newMessage : {...response.data.message}, fromSelf : true});

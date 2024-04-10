@@ -99,7 +99,6 @@ try { ... } catch (err) { ... }: The function is wrapped in a try-catch block to
 
 if (req.file) { ... }: Checks if the request contains a file. This typically indicates that an image file has been uploaded to the server.
 
-// console.log("file here-->", req.file);: Logs the uploaded file object to the console for debugging purposes.
 
 const date = Date.now();: Gets the current timestamp, which is used to generate a unique filename.
 

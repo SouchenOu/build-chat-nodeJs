@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 // import WaveSurfer from "wavesurfer.js";
 import Avatar from "../usedFiles/Avatar";
 import { FaPlay, FaStop } from "react-icons/fa";
-import WaveSurfer from "wavesurfer.js";
+// import WaveSurfer from "wavesurfer.js";
 import { calculateTime } from "@/utils/CalculateTime";
 import MessageStatus from "../usedFiles/MessageStatus";
 
@@ -25,7 +25,6 @@ function VoiceMessage({message}) {
   const waveFormRef = useRef(null); 
   const waveForm = useRef(null);
 
-  console.log("message here-->", message);
 
   
   const handlePLayAudio = () => {

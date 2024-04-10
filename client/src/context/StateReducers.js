@@ -7,6 +7,7 @@ export const initialState = {
     currentChatUser: undefined,
     messages : [],
     socket : undefined,
+    messageSearch : false,
 };
 /******reducer: Defines a function that takes the current state and an action as parameters and returns the new state based on the action type.
 
@@ -56,6 +57,11 @@ const reducer = (state, action)=>{
             return {
                 ...state,
                 messages : [...state.messages,action.newMessage]
+            }
+        case reducerCases.SET_MESSAGE_SEARCH:
+            return {
+                ...state,
+                messageSearch: !state.messageSearch,
             }
         default : return state;
     }

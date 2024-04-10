@@ -11,11 +11,13 @@ import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 import Chat from "./Chat/Chat";
 import { io } from "socket.io-client";
+import SearchMessages from "./Chat/SearchMessages";
 
 function Main() {
   const router = useRouter();
-  const [{userInfo, currentChatUser, messages}, dispatch] = useStateProvider();
+  const [{userInfo, currentChatUser, messages, messageSearch}, dispatch] = useStateProvider();
 
+  console.log("messageSearch here-->", messageSearch);
   const [redirectLogin, setRedirectLogin] = useState(false);
   const [socketEvent, setSocketEvent] = useState(false);
   const socket = useRef()
@@ -80,7 +82,8 @@ function Main() {
 
   return <div className="grid grid-cols-main h-screen w-screen max-h-screen max-w-full overflow-hidden">
     <SideBar/>
-    {currentChatUser ? <Chat /> : <ConversationPanel/>}
+    {currentChatUser ? 
+    <div className={messageSearch ? 'grid grid-cols-2' : ''}> <Chat /> {messageSearch && <SearchMessages/>} </div>: <ConversationPanel/>}
     {/* <Chat/> */}
   </div>
 }
