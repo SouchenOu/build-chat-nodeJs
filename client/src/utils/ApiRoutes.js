@@ -15,3 +15,4 @@ export const CREATE_MESSAGE = `${MessageRoute}/Create-message`;
 export const GET_MESSAGES = `${MessageRoute}/get-messages`;
 export const ADD_IMAGE_MESSAGE_ROUTES = `${MessageRoute}/add-image-message`;
 export const ADD_AUDIO_MESSAGE_ROUTES = `${MessageRoute}/add-audio-message`;
+export  const searching_messages = `${MessageRoute}/search-messages`;

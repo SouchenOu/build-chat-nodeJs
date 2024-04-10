@@ -219,3 +219,51 @@ export const addAudio = async (req, res, next) =>{
     }
 
 }
+
+// search for messages that begin with some characters
+
+export const searchMessage = async (req, res, next) => {
+
+    try{
+
+        const prisma = getPrismaInstance();
+        const {characters, fromId, toId} = req.body;
+        console.log("characters-->", characters);
+        
+        if(characters && fromId && toId ){
+            const messages = await prisma.message.findMany({
+                where : {
+                    content : {
+                        startsWith : characters
+                    },
+                   
+                        OR :
+                        [
+                            {
+                                senderId: parseInt(fromId),
+                                recipientId: parseInt(toId),
+                            },
+                            {
+                                senderId: parseInt(toId),
+                                recipientId : parseInt(fromId),
+                            }
+                        ]
+
+                    
+                }
+            });
+
+            res.json(messages);
+
+        }else{
+            res.status(400).json({error : 'Characters parametre is missing'})
+        }
+
+
+    }catch(err){
+        console.error('Error searching messages', err);
+        res.status(500).json({error : 'Internal server error'});
+
+    }
+
+}
