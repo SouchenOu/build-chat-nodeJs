@@ -50,6 +50,8 @@ function Main() {
 // this useEffect will run when the userInfo changed
   useEffect(()=>{
       if(userInfo){
+
+        /****socket.current = io(HOST);: This line initializes a socket connection using the io function from some library, passing in the HOST variable as a parameter. It seems that socket is a ref to a socket object. */
         socket.current = io(HOST);
         socket.current.emit("add-user", userInfo.id);
         dispatch({type: reducerCases.SET_SOCKET, socket});

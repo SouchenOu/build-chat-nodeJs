@@ -10,15 +10,11 @@ function List() {
 
   useEffect(()=>{
     const getContacts = async() =>{
-      console.log("enter in list");
       try{
         const {data : {users, onlineUsers}}= await axios(`${GET_CONTACTS}/${userInfo.id}`);
-        console.log("yesss here");
         // dispatch({type : reducerCases.SET_ONLINE_USERS, OnlineUsers : onlineUsers });
         dispatch({type : reducerCases.SET_USER_CONTACTS, userContacts : users });
         // console.log("data hna-->", data);
-        console.log("data here in list is -->",userContacts);
-        console.log("all online users-->", onlineUsers)
 
       }catch(err){
 

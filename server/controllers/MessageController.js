@@ -5,7 +5,7 @@ export const createMessage = async(req, res, next) =>{
     try{
         const prisma = getPrismaInstance();
         const {content, fromId, toId} = req.body;
-        // const getUser = onlineUsers.get(toId);
+        const getUser = onlineUsers.get(toId);
         if(content && fromId && toId){
             const Sendmessage = await prisma.Message.create({
                 data:{
@@ -18,7 +18,7 @@ export const createMessage = async(req, res, next) =>{
                         connect:{
                             id: parseInt(toId)
                         }},
-                    // messageStatus: getUser ? "delivered" : "sent",
+                    messageStatus: getUser ? "delivered" : "sent",
 
                 },
                 include : {
@@ -27,9 +27,11 @@ export const createMessage = async(req, res, next) =>{
 
                 }
             })
+
+            
             return res.status(201).send({message: Sendmessage});
         }
-        return res.status(400),send({message : "Message , sender and recipient users is required..."});
+        return res.status(400).send({message : "Message , sender and recipient users is required..."});
 
 
     }catch(err){
@@ -70,6 +72,7 @@ export const getMessage = async (req, res, next) =>{
         allMessages.forEach((msg, index) => {
             //sent is the default (and there is read and delevered)
             if(msg.messageStatus !== "read" && msg.senderId === parseInt(toId)){
+                console.log("enter hereee");
                 allMessages[index].messageStatus = "read";
                 unreadMessage.push(msg.id);
             }
@@ -85,6 +88,7 @@ export const getMessage = async (req, res, next) =>{
                 messageStatus : "read",
             }
         })
+        console.log("allMessages backend-->", allMessages);
         return res.status(200).send({messages : allMessages})
 
     }catch(err){

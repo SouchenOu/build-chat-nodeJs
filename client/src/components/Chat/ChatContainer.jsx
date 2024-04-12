@@ -1,7 +1,7 @@
 import { useStateProvider } from "@/context/StateContext";
 import { calculateTime } from "@/utils/CalculateTime";
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MessageStatus from "../usedFiles/MessageStatus";
 import { HOST } from "@/utils/ApiRoutes";
 import VoiceMessage from "./VoiceMessage";
@@ -13,6 +13,8 @@ import ImageMessage from "./ImageMessage";
 
 function ChatContainer() {
   const [{messages, userInfo, currentChatUser}] = useStateProvider();
+  const [forceUpdate, setForceUpdate] = useState(false); // State to force update
+
 
   const chatContainerRef = useRef(null);
 
@@ -23,6 +25,14 @@ function ChatContainer() {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
+  useEffect(() => {
+    // Update forceUpdate state whenever messages change
+    setForceUpdate(prevState => !prevState);
+    console.log("messages in useEffect-->", messages)
+  }, [messages]);
+
+  console.log("message in chatContainer to map for-->", messages);
+
 
   return <div className="h-[80vh]  relative overflow-auto flex-grow custom-scrollbar" ref={chatContainerRef}>
       <div className="mx-5 my-3">
@@ -37,7 +47,7 @@ function ChatContainer() {
                           <span className="break-all">{message.content}</span>
                           <div className="flex flex-col">
                             <span className="text-bubble-meta text-[11px] pt-4 min-w-fit">{calculateTime(message.createdAt)}</span>
-                            <span className="">{message.senderId === userInfo.id &&  <MessageStatus MessageStatus={message.messageStatus}/>}</span>
+                            <span className="">{message.senderId === userInfo.id &&  <MessageStatus MessageStatus={message.messageStatus} content={message.content}/>}</span>
                           </div>
                         </div>
                       )}

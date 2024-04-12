@@ -1,6 +1,6 @@
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
-import { ADD_IMAGE_MESSAGE_ROUTES, CREATE_MESSAGE } from "@/utils/ApiRoutes";
+import { ADD_IMAGE_MESSAGE_ROUTES, CREATE_MESSAGE, GET_MESSAGES } from "@/utils/ApiRoutes";
 import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import React, { useEffect, useRef, useState } from "react";
@@ -28,7 +28,7 @@ import CaptureAudio from "../usedFiles/CaptureAudio";
 // const CaptureAudio = dynamic(() => import("../usedFiles/CaptureAudio"), {ssr: false})
 
 function MessageBar() {
-  const [{userInfo, currentChatUser, socket}, dispatch] = useStateProvider();
+  const [{userInfo, currentChatUser, socket, messages}, dispatch] = useStateProvider();
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setshowEmojiPicker] = useState(false);
   const [grabPhoto, setgrabPhoto] = useState(false);
@@ -75,18 +75,29 @@ function MessageBar() {
     setMessage((prevMessage)=>(prevMessage += emoji.emoji));
 
   }
-  const sendMessage = async () =>{
-    try{
-      const {data} = await axios.post(CREATE_MESSAGE, {toId : currentChatUser.id, fromId: userInfo.id, content : message});
-      socket.current.emit("send-message", {toId : currentChatUser.id, fromId: userInfo.id, content : data.message});
-      dispatch({type: reducerCases.ADD_MESSAGE, newMessage: {...data.message}, fromSelf : true});
-      setMessage("");
-      
-    }catch(err){
+  const sendMessage = async () => {
+    try {
+        // Send the new message
+        const { data } = await axios.post(CREATE_MESSAGE, { toId: currentChatUser.id, fromId: userInfo.id, content: message });
 
+        // Emit the message through socket
+        socket.current.emit("send-message", { toId: currentChatUser.id, fromId: userInfo.id, content: data.message });
+        const {data : {messages}} = await axios.get(`${GET_MESSAGES}/${userInfo.id}/${currentChatUser.id}`);
+        dispatch({type:reducerCases.SET_MESSAGES, messages});
+        console.log("messages sending-->", messages);
+        // Update the message state after successful creation of the new message
+        // dispatch({ type: reducerCases.ADD_MESSAGE, newMessage: { ...data.message }, fromSelf: true });
+        // Clear the message input field
+        setMessage("");
+
+        // Log for debugging
+        console.log("Message sent successfully.");
+
+    } catch (err) {
+        console.error("Error sending message:", err);
+        // Handle errors here
     }
-
-  }
+}
 
   useEffect(()=>{
     if(grabPhoto){
