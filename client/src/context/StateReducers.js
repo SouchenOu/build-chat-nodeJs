@@ -8,6 +8,8 @@ export const initialState = {
     messages : [],
     socket : undefined,
     messageSearch : false,
+    userContacts : [],
+    OnlineUsers : []
 };
 /******reducer: Defines a function that takes the current state and an action as parameters and returns the new state based on the action type.
 
@@ -62,6 +64,17 @@ const reducer = (state, action)=>{
             return {
                 ...state,
                 messageSearch: !state.messageSearch,
+            }
+        case reducerCases.SET_USER_CONTACTS:
+            return {
+                ...state,
+                userContacts : action.userContacts,
+            }
+        case reducerCases.SET_ONLINE_USERS:
+            return {
+                ...state,
+                OnlineUsers : action.OnlineUsers,
+
             }
         default : return state;
     }

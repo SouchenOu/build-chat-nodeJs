@@ -17,7 +17,6 @@ function Main() {
   const router = useRouter();
   const [{userInfo, currentChatUser, messages, messageSearch}, dispatch] = useStateProvider();
 
-  console.log("messageSearch here-->", messageSearch);
   const [redirectLogin, setRedirectLogin] = useState(false);
   const [socketEvent, setSocketEvent] = useState(false);
   const socket = useRef()

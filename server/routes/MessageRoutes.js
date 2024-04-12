@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addAudio, addImage, createMessage, getMessage, searchMessage } from "../controllers/MessageController.js";
+import { addAudio, addImage, createMessage, getMessage, getUsersThatHaveContactsWith, searchMessage } from "../controllers/MessageController.js";
 import multer from "multer";
 
 
@@ -13,5 +13,6 @@ router.get("/get-messages/:fromId/:toId", getMessage);
 router.post("/add-image-message",uploadImage.single("image"), addImage);
 router.post("/add-audio-message", uploadAudio.single("audio"), addAudio);
 router.post("/search-messages", searchMessage);
+router.get("/get-contacts/:fromId", getUsersThatHaveContactsWith);
 
 export default router;

@@ -49,22 +49,30 @@ this socket globally, presumably for handling chat-related functionality. */
  * and assigns the connected socket to a global variable for further interaction within the application. */
 global.onlineUsers = new Map();
 io.on("connection", (socket) =>{
-    global.chatSocket = socket;
+    // Store the socket ID for each connected user
     socket.on("add-user", (userId) =>{
-        onlineUsers.set(userId, socket.id)
+        global.onlineUsers.set(userId, socket.id); // Add user to onlineUsers map
     });
+
+    // Remove the user from onlineUsers when the socket disconnects
+    socket.on("disconnect", () => {
+        global.onlineUsers.forEach((value, key) => {
+            if (value === socket.id) {
+                global.onlineUsers.delete(key);
+            }
+        });
+    });
+
+    // Your existing logic for sending messages
     socket.on("send-message", (data)=>{
-        const sendUserSocket = onlineUsers.get(data.toId);
+        const sendUserSocket = global.onlineUsers.get(data.toId);
         if(sendUserSocket){
             socket.to(sendUserSocket).to(data.fromId).emit("message-receive", {
                 fromId: data.fromId,
                 message: data.content,
             })
         }
-    
-    })
-    
-     
+    });
 });
 
 
