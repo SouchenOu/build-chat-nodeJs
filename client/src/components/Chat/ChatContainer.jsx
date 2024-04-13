@@ -28,10 +28,8 @@ function ChatContainer() {
   useEffect(() => {
     // Update forceUpdate state whenever messages change
     setForceUpdate(prevState => !prevState);
-    console.log("messages in useEffect-->", messages)
   }, [messages]);
 
-  console.log("message in chatContainer to map for-->", messages);
 
 
   return <div className="h-[80vh]  relative overflow-auto flex-grow custom-scrollbar" ref={chatContainerRef}>

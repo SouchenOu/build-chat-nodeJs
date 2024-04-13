@@ -11,6 +11,11 @@ export const initialState = {
     userContacts : [],
     OnlineUsers : [],
     filtredContacts : [],
+    videoCall : undefined,
+    voiceCall : undefined,
+    incomingVoiceCall :undefined,
+    incomingVideoCall : undefined,
+
 };
 /******reducer: Defines a function that takes the current state and an action as parameters and returns the new state based on the action type.
 
@@ -81,6 +86,35 @@ const reducer = (state, action)=>{
             return {
                 ...state,
                 filtredContacts : action.filtredContacts,
+            }
+        case reducerCases.SET_VIDEO_CALL:
+            return {
+                ...state,
+                videoCall : action.videoCall,
+            }
+        case reducerCases.SET_VOICE_CALL:
+            return {
+                ...state,
+                voiceCall: action.voiceCall
+            }
+        case reducerCases.SET_INCOMING_VIDEO_CALL:
+            return {
+                ...state,
+                incomingVideoCall: action.incomingVideoCall
+            }
+        case reducerCases.SET_INCOMING_VOICE_CALL:
+            return {
+                ...state,
+                incomingVoiceCall: action.incomingVoiceCall
+            }
+        case reducerCases.END_CALL:
+            return {
+                ...state,
+                voiceCall : undefined,
+                videoCall: undefined,
+                incomingVideoCall: undefined,
+                incomingVoiceCall: undefined,
+
             }
         default : return state;
     }

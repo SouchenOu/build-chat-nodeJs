@@ -72,7 +72,6 @@ export const getMessage = async (req, res, next) =>{
         allMessages.forEach((msg, index) => {
             //sent is the default (and there is read and delevered)
             if(msg.messageStatus !== "read" && msg.senderId === parseInt(toId)){
-                console.log("enter hereee");
                 allMessages[index].messageStatus = "read";
                 unreadMessage.push(msg.id);
             }
@@ -88,7 +87,6 @@ export const getMessage = async (req, res, next) =>{
                 messageStatus : "read",
             }
         })
-        console.log("allMessages backend-->", allMessages);
         return res.status(200).send({messages : allMessages})
 
     }catch(err){
@@ -232,7 +230,6 @@ export const searchMessage = async (req, res, next) => {
 
         const prisma = getPrismaInstance();
         const {characters, fromId, toId} = req.body;
-        console.log("characters-->", characters);
         
         if(characters && fromId && toId ){
             const messages = await prisma.message.findMany({
@@ -332,7 +329,6 @@ export const getUsersThatHaveContactsWith = async (req, res, next) =>{
                 newUser.createdAt = createdAt;
                 newUser.senderId = senderId;
                 newUser.recipientId = recipientId;
-                console.log("calculatedId-->", calculatedId);
                 users.set(calculatedId, newUser);
 
 
@@ -354,8 +350,6 @@ export const getUsersThatHaveContactsWith = async (req, res, next) =>{
                 }
             })
         }
-        console.log("users final-->", users);
-        console.log("Response from backend:", { users: Array.from(users.values()), onlineUsers: Array.from(onlineUsers.keys()) });
         res.status(200).json({ users: Array.from(users.values()), onlineUsers: Array.from(onlineUsers.keys())});
 
     }catch(err){
@@ -400,7 +394,6 @@ export const searchContacts = async (req, res, next) =>{
                 }
             });
 
-            console.log("user here-->", user);
 
                 const allMessages = [...user.MessageSent, ...user.MessageRecipient];
                 const users = new Map();
@@ -409,7 +402,6 @@ export const searchContacts = async (req, res, next) =>{
                     const isSender = userId === elem.senderId;
                     const identifierUser = isSender ? elem.recipientId : elem.senderId;
                     const {id, type, content, messageStatus, createdAt, senderId, recipientId} = elem;
-                    console.log("identifier-*********->", identifierUser);
                     if(!users.get(identifierUser)){
                         let newUser = isSender ? { ...elem.recipient, totalUnreadMessages: 0 } : { ...elem.sender, totalUnreadMessages: messageStatus !== 'read' ? 1 : 0 };
                         newUser.messageId = id;

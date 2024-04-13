@@ -84,14 +84,12 @@ function MessageBar() {
         socket.current.emit("send-message", { toId: currentChatUser.id, fromId: userInfo.id, content: data.message });
         const {data : {messages}} = await axios.get(`${GET_MESSAGES}/${userInfo.id}/${currentChatUser.id}`);
         dispatch({type:reducerCases.SET_MESSAGES, messages});
-        console.log("messages sending-->", messages);
         // Update the message state after successful creation of the new message
         // dispatch({ type: reducerCases.ADD_MESSAGE, newMessage: { ...data.message }, fromSelf: true });
         // Clear the message input field
         setMessage("");
 
         // Log for debugging
-        console.log("Message sent successfully.");
 
     } catch (err) {
         console.error("Error sending message:", err);

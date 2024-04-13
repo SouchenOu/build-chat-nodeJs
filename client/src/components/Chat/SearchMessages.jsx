@@ -15,15 +15,12 @@ function SearchMessages() {
   const [{userInfo, currentChatUser}, dispatch] = useStateProvider();
   const [ valueInput, setValueInput] = useState("");
   const [searchingData, setSearchingData] = useState([]);
-  console.log("userInfo here-->", userInfo);
-  console.log("chatCurrent-->", currentChatUser);
-  console.log("value input-->", valueInput);
+
   useEffect(()=>{
     const search_messages = async () =>{
       if(valueInput )
       {
         const {data} = await axios.post(searching_messages, {characters : valueInput, fromId : userInfo.id, toId: currentChatUser.id});
-        console.log("data here-->", data);
         setSearchingData(data);
 
       }
@@ -33,7 +30,6 @@ function SearchMessages() {
     }
     search_messages();
   },[valueInput]);
-  console.log("searchi data-..>", searchingData);
   return <div className="border-conversation-border border-[10px] w-full bg-conversation-border flex flex-col z-[10] max-h-screen">
     <div className="h-[16]  p-[10px] flex gap-[10] items-center bg-panel-header-background ">
       <FontAwesomeIcon icon={faCircleXmark} className="cursor-pointer text-icon-lighter text-2xl" onClick={()=> dispatch({type : reducerCases.SET_MESSAGE_SEARCH})}  />

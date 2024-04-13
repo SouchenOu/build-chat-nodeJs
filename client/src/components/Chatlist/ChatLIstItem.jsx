@@ -7,9 +7,7 @@ import MessageStatus from "../usedFiles/MessageStatus";
 import { FaCamera, FaMicrophone } from "react-icons/fa";
 
 function ChatLIstItem({data}) {
-  // console.log("datata-->", data);
   const [{userInfo, currentChatUser, contactsPage}, dispatch] = useStateProvider();
-  console.log("contactsPage-->", contactsPage);
   const handleUserClick = () =>{
       if(contactsPage)
       {

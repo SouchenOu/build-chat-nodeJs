@@ -9,12 +9,9 @@ import { BsFilter } from "react-icons/bs";
 function SearchBar({open, setOpen}) {
   const [valueInput, setValutInput] = useState("");
   const [{userInfo, currentCHatUser, filtredContacts}, dispatch] = useStateProvider();
-console.log("iam here");
   useEffect(()=>{
-    console.log("yes");
     const FilterContactsfunc = async () =>{
         try{
-          console.log("enter");
           // if (valueInput.trim() === '') {
           //   dispatch({ type: reducerCases.SET_CONTACTS_SEARCH, filtredContacts: [] });
           //   setOpen(!open);
@@ -22,8 +19,6 @@ console.log("iam here");
           const {data : {users}} = await axios.post(FILTER_CONTACTS, {userId : userInfo.id, characters : valueInput});
 
           dispatch({ type: reducerCases.SET_CONTACTS_SEARCH, filtredContacts: users });
-          console.log("data here filtring-->", users);
-          console.log("filtred contact-->", filtredContacts);
         }catch(err){
 
         }
