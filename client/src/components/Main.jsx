@@ -12,10 +12,12 @@ import { reducerCases } from "@/context/constants";
 import Chat from "./Chat/Chat";
 import { io } from "socket.io-client";
 import SearchMessages from "./Chat/SearchMessages";
+import VideoCall from "./Call/VideoCall";
+import VoiceCall from "./Call/VoiceCall";
 
 function Main() {
   const router = useRouter();
-  const [{userInfo, currentChatUser, messages, messageSearch}, dispatch] = useStateProvider();
+  const [{userInfo, currentChatUser, messages, messageSearch, videoCall, voiceCall, incomingVideoCall, incomingVoiceCall}, dispatch] = useStateProvider();
 
   const [redirectLogin, setRedirectLogin] = useState(false);
   const [socketEvent, setSocketEvent] = useState(false);
@@ -82,10 +84,11 @@ function Main() {
   },[currentChatUser]);
 
   return <div className="grid grid-cols-main h-screen w-screen max-h-screen max-w-full overflow-hidden">
+    {videoCall && (<div className="h-screen w-screen max-h-full overflow-hidden"><VideoCall/></div>)}
+    {voiceCall && (<div className=""><VoiceCall/></div>)}
     <SideBar/>
     {currentChatUser ? 
     <div className={messageSearch ? 'grid grid-cols-2' : ''}> <Chat /> {messageSearch && <SearchMessages/>} </div>: <ConversationPanel/>}
-    {/* <Chat/> */}
   </div>
 }
 
