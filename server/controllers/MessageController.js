@@ -364,3 +364,81 @@ export const getUsersThatHaveContactsWith = async (req, res, next) =>{
     }
 
 }
+
+export const searchContacts = async (req, res, next) =>{
+    try{
+        const {userId, characters} = req.body;
+        const prisma = getPrismaInstance();
+
+        if(userId && characters){
+            const user = await prisma.user.findUnique({
+                where : {
+                    id : userId,
+                },
+                include: {
+                    MessageSent:{
+                        include: {
+                            sender: true,
+                            recipient: true,
+                        },
+                        orderBy:{
+                            createdAt: "desc"
+                        },
+    
+    
+                    },
+    
+                    MessageRecipient:{
+                        include:{
+                            sender: true,
+                            recipient: true,
+                        },
+                        orderBy:{
+                            createdAt: "desc"
+                        }
+                    }
+                }
+            });
+
+            console.log("user here-->", user);
+
+                const allMessages = [...user.MessageSent, ...user.MessageRecipient];
+                const users = new Map();
+
+                allMessages.map((elem)=>{
+                    const isSender = userId === elem.senderId;
+                    const identifierUser = isSender ? elem.recipientId : elem.senderId;
+                    const {id, type, content, messageStatus, createdAt, senderId, recipientId} = elem;
+                    console.log("identifier-*********->", identifierUser);
+                    if(!users.get(identifierUser)){
+                        let newUser = isSender ? { ...elem.recipient, totalUnreadMessages: 0 } : { ...elem.sender, totalUnreadMessages: messageStatus !== 'read' ? 1 : 0 };
+                        newUser.messageId = id;
+                        newUser.type = type;
+                        newUser.content = content;
+                        newUser.messageStatus = messageStatus;
+                        newUser.createdAt = createdAt;
+                        newUser.senderId = senderId;
+                        newUser.recipientId = recipientId;
+                        users.set(identifierUser, newUser);
+
+                    }
+                })
+
+              
+
+            const filteredUsers = Array.from(users.values()).filter(user => user.name.includes(characters));
+
+            res.status(200).json({ users: filteredUsers });
+        
+
+        }else{
+            res.status(400).json({error : "Missing userId or characters"});
+        }
+
+
+
+        
+    }catch(err){
+        next(err);
+    }
+}

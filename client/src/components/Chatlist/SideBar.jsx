@@ -20,12 +20,14 @@ function SideBar() {
       setPageType("default");
     }
   },[contactsPage])
+
+  const [open , setOpen] = useState(false);
   return <div className="flex flex-col max-h-screen z-20" style={{ background: 'linear-gradient(to bottom, #2c1f2c,#88211e, #910f20, #3d0416)' }}>
     {pageType === "default" && 
     <>
         <ChatListHeader/>
-        <SearchBar/>
-        <List/>
+        <SearchBar open={open} setOpen={setOpen}/>
+        <List open={open}/>
     </>
      
     } 

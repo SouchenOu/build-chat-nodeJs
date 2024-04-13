@@ -62,7 +62,7 @@ function Main() {
     if(socket.current && !socketEvent){
       socket.current.on("message-receive", (data)=>{
        
-        dispatch({type: reducerCases.ADD_MESSAGE, newMessage:{...data.message}})
+        dispatch({type: reducerCases.ADD_MESSAGE, newMessage:{...data.message}}) 
       })
       setSocketEvent(true);
     }

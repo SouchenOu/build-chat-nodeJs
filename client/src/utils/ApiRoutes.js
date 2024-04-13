@@ -17,3 +17,4 @@ export const ADD_IMAGE_MESSAGE_ROUTES = `${MessageRoute}/add-image-message`;
 export const ADD_AUDIO_MESSAGE_ROUTES = `${MessageRoute}/add-audio-message`;
 export  const searching_messages = `${MessageRoute}/search-messages`;
 export const GET_CONTACTS = `${MessageRoute}/get-contacts`;
+export const FILTER_CONTACTS = `${MessageRoute}/filter-contacts`;

@@ -1,13 +1,13 @@
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
-import { GET_CONTACTS } from "@/utils/ApiRoutes";
+import { FILTER_CONTACTS, GET_CONTACTS } from "@/utils/ApiRoutes";
 import axios  from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ChatLIstItem from "./ChatLIstItem";
 
-function List() {
-  const [{userInfo, currentUserChat, userContacts, OnlineUsers}, dispatch] = useStateProvider();
-
+function List({open}) {
+  const [{userInfo, currentUserChat, userContacts, OnlineUsers, filtredContacts}, dispatch] = useStateProvider();
+  console.log("filtettee-->", filtredContacts);
   useEffect(()=>{
     const getContacts = async() =>{
       try{
@@ -24,12 +24,29 @@ function List() {
     if(userInfo?.id)
       getContacts();
   },[userInfo])
-  return <div>
-    {userContacts.map((elem)=>(
 
-     <ChatLIstItem data={elem} key={elem.id}/>
-    ))}
-  </div>;
+
+  return (
+    <div>
+      <div>
+        {open && <div>
+          {filtredContacts.map((elem)=>(
+            <ChatLIstItem data={elem}/>
+          ))}
+          
+          </div>}
+      </div>
+      { !open && <div>{userContacts.map((elem)=>(
+
+            <ChatLIstItem data={elem} key={elem.id}/>
+        ))}</div>
+
+      }
+      
+  </div>
+
+  )
+ ;
 }
 
 export default List;

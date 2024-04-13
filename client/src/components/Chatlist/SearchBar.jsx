@@ -1,15 +1,43 @@
-import React from "react";
+import { useStateProvider } from "@/context/StateContext";
+import { reducerCases } from "@/context/constants";
+import { FILTER_CONTACTS } from "@/utils/ApiRoutes";
+import  axios from "axios";
+import React, { useEffect, useState } from "react";
 import {BiSearchAlt2} from "react-icons/bi";
 import { BsFilter } from "react-icons/bs";
 
-function SearchBar() {
-  return <div className=" flex py-3 items-center gap-5 pl-7" style={{ background: 'linear-gradient(to bottom, #2D132C,#EE4540, #C72C41, #801336)' }}>
+function SearchBar({open, setOpen}) {
+  const [valueInput, setValutInput] = useState("");
+  const [{userInfo, currentCHatUser, filtredContacts}, dispatch] = useStateProvider();
+console.log("iam here");
+  useEffect(()=>{
+    console.log("yes");
+    const FilterContactsfunc = async () =>{
+        try{
+          console.log("enter");
+          // if (valueInput.trim() === '') {
+          //   dispatch({ type: reducerCases.SET_CONTACTS_SEARCH, filtredContacts: [] });
+          //   setOpen(!open);
+          // }
+          const {data : {users}} = await axios.post(FILTER_CONTACTS, {userId : userInfo.id, characters : valueInput});
+
+          dispatch({ type: reducerCases.SET_CONTACTS_SEARCH, filtredContacts: users });
+          console.log("data here filtring-->", users);
+          console.log("filtred contact-->", filtredContacts);
+        }catch(err){
+
+        }
+    }
+    FilterContactsfunc();
+
+  },[userInfo.id, valueInput, dispatch])
+  return <div className=" flex py-3 items-center gap-5 pl-7" style={{ background: 'linear-gradient(to bottom, #2D132C,#EE4540, #C72C41, #801336)' }} onClick={()=> setOpen(true)}>
     <div className="bg-panel-header-background flex items-center gap-5 px-10">
         <div>
-          <BiSearchAlt2 className="text-panel-header-icon cursor-pointer "/>
+          <BiSearchAlt2 className="text-panel-header-icon cursor-pointer " />
         </div>
         <div>
-          <input type="text" placeholder="search or start a new chat" className="bg-transparent text-sm focus:outline-none text-white w-full"/>
+          <input value={valueInput} type="text" placeholder="search or start a new chat" className="bg-transparent text-sm focus:outline-none text-white w-full" onChange={(e)=>setValutInput(e.target.value)}/>
         </div>
 
     </div>
