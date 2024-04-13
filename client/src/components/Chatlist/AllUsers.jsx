@@ -11,11 +11,26 @@ function AllUsers() {
 
   const [ {}, dispatch] = useStateProvider();
   const [AllUsers, setAllUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchContacts, setSearchContacts] = useState([]);
 
+  useEffect(()=>{
+    if(searchTerm.length){
+      const filtredData = {};
+      Object.keys(AllUsers).forEach((key)=>{
+        filtredData[key] = AllUsers[key].filter((obj)=>obj.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      })
+      setSearchContacts(filtredData);
+
+    }else{
+      setSearchContacts(AllUsers);
+    }
+  },[searchTerm])
   useEffect(()=>{
     const getUsers = async() =>{
       try{
           const {data : {users}} =  await axios.get(Get_All_Users);
+          setSearchContacts(users);
           setAllUsers(users);
       }catch(err){
 
@@ -40,15 +55,15 @@ function AllUsers() {
               <BiSearchAlt2 className="text-panel-header-icon cursor-pointer "/>
             </div>
             <div className="p-3 ">
-              <input type="text" placeholder="search for a new friend" className="bg-transparent text-sm focus:outline-none text-white w-full"/>
+              <input value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} type="text" placeholder="search for a new friend" className="bg-transparent text-sm focus:outline-none text-white w-full"/>
             </div>
 
         </div>
       </div>
 
 
-      {Object.entries(AllUsers).map(([index, userList]) =>{
-        return (<div key={Date.now() + index}>
+      {Object.entries(searchContacts).map(([index, userList]) =>{
+        return (userList.length > 0 && <div key={Date.now() + index}>
           <div className="text-teal-light pl-10 py-5">{index}</div>
           {userList.map(elem =>{
             return (<ChatLIstItem data={elem} isContactPage={true} key={elem.id}>

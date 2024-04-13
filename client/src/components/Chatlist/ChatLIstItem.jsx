@@ -6,11 +6,12 @@ import { calculateTime } from "@/utils/CalculateTime";
 import MessageStatus from "../usedFiles/MessageStatus";
 import { FaCamera, FaMicrophone } from "react-icons/fa";
 
-function ChatLIstItem({data,isContactsPage = false}) {
+function ChatLIstItem({data}) {
   // console.log("datata-->", data);
-  const [{userInfo, currentChatUser}, dispatch] = useStateProvider();
+  const [{userInfo, currentChatUser, contactsPage}, dispatch] = useStateProvider();
+  console.log("contactsPage-->", contactsPage);
   const handleUserClick = () =>{
-      if(isContactsPage)
+      if(contactsPage)
       {
         dispatch({type: reducerCases.CHANGE_CURRENT_CHAT_USER, user : {
           name : data.name,
@@ -37,7 +38,7 @@ function ChatLIstItem({data,isContactsPage = false}) {
           <p className="text-white text-xl">{data.name}</p>
         </div>
         {
-          !isContactsPage && <div> 
+          !contactsPage && <div> 
             <span className={`${data.totalUnreadMessages > 0 ? 'text-secondary' : 'text-icon-green'}`}>{calculateTime(data.createdAt)}</span>
           </div>
         }
@@ -45,7 +46,7 @@ function ChatLIstItem({data,isContactsPage = false}) {
       <div className="flex border-b border-conversation-border">
       <div className="flex justify-between w-full pb-2 pt-1 p3-2">
         <span className="text-secondary line-clamp-1 text-sm">
-          {isContactsPage ? (data.about) : (<div className="flex items-center gap-1 max-w-[200px] sm:max-w-[250px] md:max-w-[300px] lg-max-w-[200px] xl-max-w-[300px]">
+          {contactsPage ? (data.about) : (<div className="flex items-center gap-1 max-w-[200px] sm:max-w-[250px] md:max-w-[300px] lg-max-w-[200px] xl-max-w-[300px]">
               {data.senderId === userInfo.id && (<MessageStatus  MessageStatus={data.messageStatus}/>) }
               {data.type === "text" && <span className="truncate">{data.content}</span>}
               {data.type === "image" && <span className="text-center flex gap-1"><FaCamera className="text-panel-header-icon"/>Image</span>}

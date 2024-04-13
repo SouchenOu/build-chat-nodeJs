@@ -369,8 +369,8 @@ export const searchContacts = async (req, res, next) =>{
     try{
         const {userId, characters} = req.body;
         const prisma = getPrismaInstance();
-
-        if(userId && characters){
+       
+        if(userId){
             const user = await prisma.user.findUnique({
                 where : {
                     id : userId,
@@ -425,7 +425,10 @@ export const searchContacts = async (req, res, next) =>{
                 })
 
               
+            if(!characters){
+                return   res.status(200).json({ users: Array.from(users.values())});
 
+            }
             const filteredUsers = Array.from(users.values()).filter(user => user.name.includes(characters));
 
             res.status(200).json({ users: filteredUsers });
