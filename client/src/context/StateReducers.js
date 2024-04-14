@@ -13,7 +13,7 @@ export const initialState = {
     filtredContacts : [],
     videoCall : undefined,
     voiceCall : undefined,
-    incomingVoiceCall :undefined,
+    incomingVoiceCall : undefined,
     incomingVideoCall : undefined,
 
 };
@@ -100,12 +100,13 @@ const reducer = (state, action)=>{
         case reducerCases.SET_INCOMING_VIDEO_CALL:
             return {
                 ...state,
-                incomingVideoCall: action.incomingVideoCall
+                incomingVideoCall: action.incomingVideoCall,
             }
         case reducerCases.SET_INCOMING_VOICE_CALL:
+            console.log("hererere", action.incomingVoiceCall);
             return {
                 ...state,
-                incomingVoiceCall: action.incomingVoiceCall
+                incomingVoiceCall: action.incomingVoiceCall,
             }
         case reducerCases.END_CALL:
             return {

@@ -9,8 +9,8 @@ import { reducerCases } from "@/context/constants";
 import VoiceCall from "../Call/VoiceCall";
 
 function ChatHeader() {
-  const [{currentChatUser}, dispatch] = useStateProvider();
-
+  const [{currentChatUser , voiceCall}, dispatch] = useStateProvider();
+  console.log("voice call here-->", voiceCall);
   const handleVoiceCall = () =>{
     dispatch({type : reducerCases.SET_VOICE_CALL, voiceCall :{...currentChatUser, type: "outgoing", callType: "voice", roomId : Date.now()}})
   }

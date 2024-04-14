@@ -66,6 +66,7 @@ io.on("connection", (socket) =>{
     // Your existing logic for sending messages
     socket.on("send-message", (data)=>{
         const sendUserSocket = global.onlineUsers.get(data.toId);
+        console.log("in message receiver-->", sendUserSocket);
         if(sendUserSocket){
             socket.to(sendUserSocket).to(data.fromId).emit("message-receive", {
                 fromId: data.fromId,
@@ -73,6 +74,53 @@ io.on("connection", (socket) =>{
             })
         }
     });
+
+    socket.on("outgoing-voice-call", (data)=>{
+        console.log("backend on -->", data.to);
+        const sendUserSocket = global.onlineUsers.get(data.to);
+
+        if(sendUserSocket){
+            socket.to(sendUserSocket).emit('incoming-voice-call', {
+                from: data.from,
+                roomId: data.roomId, 
+                callType: data.callType
+            })
+        }
+
+    });
+
+    socket.on("outgoing-video-call", (data)=>{
+        const sendUserSocket = onlineUsers.get(data.to);
+        if(sendUserSocket){
+            socket.to(sendUserSocket).emit('incoming-video-call', {
+                from: data.from,roomId: data.roomId, callType: data.callType
+            })
+        }
+
+    });
+
+    socket.on("reject-voice-call", (data)=>{
+        const sendUserSocket = onlineUsers.get(data.from);
+        if(sendUserSocket){
+            socket.to(sendUserSocket).emit("voice-call-rejected")
+        }
+    });
+
+    socket.on("reject-video-call", (data)=>{
+        const sendUserSocket = onlineUsers.get(data.from);
+        if(sendUserSocket){
+            socket.to(sendUserSocket).emit("video-call-rejected")
+        }
+    });
+
+    socket.on("accept-incoming-call", ({id})=>{
+        console.log("accept in backend");
+        const sendUserSocket = onlineUsers.get(id);
+        if(sendUserSocket)
+            socket.to(sendUserSocket).emit("accept-call");
+    })
+
+
 });
 
 

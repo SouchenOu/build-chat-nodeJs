@@ -14,11 +14,12 @@ import { io } from "socket.io-client";
 import SearchMessages from "./Chat/SearchMessages";
 import VideoCall from "./Call/VideoCall";
 import VoiceCall from "./Call/VoiceCall";
+import IncomingVideoCall from "./usedFiles/IncomingVideoCall";
+import IncomingCall from "./usedFiles/IncomingCall";
 
 function Main() {
   const router = useRouter();
   const [{userInfo, currentChatUser, messages, messageSearch, videoCall, voiceCall, incomingVideoCall, incomingVoiceCall}, dispatch] = useStateProvider();
-
   const [redirectLogin, setRedirectLogin] = useState(false);
   const [socketEvent, setSocketEvent] = useState(false);
   const socket = useRef()
@@ -65,6 +66,25 @@ function Main() {
       socket.current.on("message-receive", (data)=>{
        
         dispatch({type: reducerCases.ADD_MESSAGE, newMessage:{...data.message}}) 
+      });
+
+      socket.current.on("incoming-voice-call",({from,roomId, callType})=>{
+        dispatch({type: reducerCases.SET_INCOMING_VOICE_CALL, incomingVoiceCall: {...from,roomId, callType}})
+        console.log("incoming voice in main-->", incomingVoiceCall);
+
+      });
+
+      socket.current.on("incoming-video-call",({from,roomId, callType})=>{
+        dispatch({type: reducerCases.SET_INCOMING_VIDEO_CALL, incomingVideoCall: {...from,roomId, callType}})
+
+      });
+      console.log("incoming here-->", incomingVoiceCall);
+      socket.current.on("voice-call-rejected", ()=>{
+        dispatch({type : reducerCases.END_CALL})
+      })
+
+      socket.current.on("video-call-rejected", ()=>{
+        dispatch({type : reducerCases.END_CALL})
       })
       setSocketEvent(true);
     }
@@ -83,9 +103,13 @@ function Main() {
     }
   },[currentChatUser]);
 
+  console.log("videoCall-->", videoCall);
+
   return <div className="grid grid-cols-main h-screen w-screen max-h-screen max-w-full overflow-hidden">
+    {incomingVideoCall && <IncomingVideoCall/>}
+    {incomingVoiceCall && <IncomingCall/>}
     {videoCall && (<div className="h-screen w-screen max-h-full overflow-hidden"><VideoCall/></div>)}
-    {voiceCall && (<div className=""><VoiceCall/></div>)}
+    {voiceCall && (<div className="h-screen w-screen max-h-full overflow-hidden"><VoiceCall/></div>)}
     <SideBar/>
     {currentChatUser ? 
     <div className={messageSearch ? 'grid grid-cols-2' : ''}> <Chat /> {messageSearch && <SearchMessages/>} </div>: <ConversationPanel/>}

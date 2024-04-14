@@ -6,7 +6,8 @@ import { reducerCases } from "@/context/constants";
 
 function Container({data}) {
   const [{socket, userInfo}, dispatch] = useStateProvider();
-  console.log("data here call ->", data);
+  console.log("enter hereree****(((((");
+  console.log("data here in container ->", data);
   const endCall = () =>{
     dispatch({type: reducerCases.END_CALL});
   }
@@ -16,7 +17,7 @@ function Container({data}) {
         <span className="text-5xl">{data.name}</span>
         <span className="text-lg">{callAccepted && data.callType !== 'video' ? 'on going call' : 'Calling'}</span>
       </div>
-      {(!callAccepted || data.callType === 'audio') && <div className="flex flex-col items-center ">
+      {(!callAccepted || data.callType === 'voice') && <div className="flex flex-col items-center ">
         <Image  className="rounded-full" src={data.profilePicture} alt="avatar" height={300} width={300}/>
         </div>}
       <div className="flex flex-col items-center ">
